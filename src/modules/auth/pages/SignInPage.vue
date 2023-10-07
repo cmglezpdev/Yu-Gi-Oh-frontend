@@ -40,7 +40,7 @@
       <p class="text-center mt-5">
         ¿No tienes cuenta? 
         <router-link to="/auth/signup" class="text-violet-500">
-          Créate una
+          Regístrate
         </router-link>
       </p>
     </footer>

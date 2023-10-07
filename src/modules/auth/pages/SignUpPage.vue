@@ -87,7 +87,7 @@
       </fieldset>
 
       <fieldset class="mt-6">
-        <Buttonn type="submit" label="Iniciar sesión" class="w-full" />
+        <Buttonn type="submit" label="Registrarse" class="w-full" />
       </fieldset>
     </form>
     
