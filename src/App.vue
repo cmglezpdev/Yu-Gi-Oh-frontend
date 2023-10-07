@@ -1,13 +1,10 @@
 <template>
-  <Counter />
+  <router-view />
 </template>
 
 <script lang="ts">
-  import Counter from './components/Counter.vue'
-
   export default {
-    components: {
-      Counter
-    }
+    name: 'App',
+    components: {}
   }
 </script>
