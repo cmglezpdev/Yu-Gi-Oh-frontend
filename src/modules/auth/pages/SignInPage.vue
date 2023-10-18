@@ -20,14 +20,15 @@
       
       <fieldset class='flex flex-col'>
         <label for='password'>Contraseña</label>
-        <span class='p-input-icon-right'>
-          <i class='pi pi-eye text-xl' />
+        <span class='p-input-icon-right p-input-icon-left'>
+          <i class='pi pi-lock text-xl' />
           <InputText 
-            id='password' 
-            type='password' 
-            placeholder='********' 
-            class='w-full'
+          id='password' 
+          type='password' 
+          placeholder='********' 
+          class='w-full'
           />
+          <i class='pi pi-eye text-xl' />
         </span>
       </fieldset>
 

@@ -63,7 +63,6 @@
         <div class='flex flex-col'>
           <label for='province'>Provincia</label>
           <Dropdown
-            editable
             id='province' 
             class='w-full'
             placeholder='Selecciona un país'
@@ -75,7 +74,6 @@
         <div class='flex flex-col'>
           <label for='minicipality'>Municipio</label>
           <Dropdown
-            editable
             id='minicipality' 
             class='w-full'
             placeholder='Selecciona un país'
