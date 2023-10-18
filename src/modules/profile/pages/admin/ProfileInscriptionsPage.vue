@@ -2,11 +2,11 @@
   <ProfileLayout>
     <section class="m-4">
       <div class="flex justify-start gap-4 mb-4">
-        <MultiSelect v-model="selectedUsers" @change="filterTable" :options="inscriptions" optionLabel="user" dataKey="user" filter :maxSelectedLabels="3" placeholder="Usuarios" />
-        <MultiSelect v-model="selectedTournaments" @change="filterTable" :options="inscriptions" optionLabel="tournament" dataKey="tournament" filter :maxSelectedLabels="3" placeholder="Torneos" />
-        <MultiSelect v-model="selectedPlaces" @change="filterTable" :options="inscriptions" optionLabel="place" dataKey="place" filter :maxSelectedLabels="3" placeholder="Lugares" />
+        <MultiSelect v-model="selectedUsers" @change="filterTable" :options="users" filter :maxSelectedLabels="3" placeholder="Usuarios" />
+        <MultiSelect v-model="selectedTournaments" @change="filterTable" :options="tournaments" filter :maxSelectedLabels="3" placeholder="Torneos" />
+        <MultiSelect v-model="selectedPlaces" @change="filterTable" :options="places" filter :maxSelectedLabels="3" placeholder="Lugares" />
       </div>
-      <DataTable :value="inscriptions" showGridlines tableStyle="min-width: 50rem">
+      <DataTable :value="inscriptionsShown" showGridlines tableStyle="min-width: 50rem">
         <Column field="user" header="Usuario" />
         <Column field="tournament" header="Torneo" />
         <Column field="inscription_date" header="Fecha de inscripción" />
@@ -18,14 +18,14 @@
 </template>
 
 <script lang="ts" setup>
+  import { ref } from 'vue';
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
   import MultiSelect from 'primevue/multiselect';
 
   import ProfileLayout from '@/modules/profile/layouts/ProfileLayout.vue'
-  import { ref } from 'vue';
 
-  interface ITournament {
+  interface IInscriptions {
     user: string;
     tournament: string;
     inscription_date: string;
@@ -33,7 +33,7 @@
     actions: string;
   }
 
-  const inscriptions = ref<ITournament[]>([
+  const inscriptions: IInscriptions[] = [
     {
       user: '@cmglezpdev',
       tournament: 'Enanitos verdes',
@@ -55,20 +55,23 @@
       place: 'C. Sur, P. Río',
       actions: 'delete'
     } 
-  ])
+  ]
 
-  const inscripcionesShown = ref<ITournament[]>(inscriptions.value)
-  const selectedUsers = ref<ITournament[]>([])
-  const selectedTournaments = ref<ITournament[]>([])
-  const selectedPlaces = ref<ITournament[]>([])
+  const inscriptionsShown = ref<IInscriptions[]>(inscriptions)
+  const users = ref<string[]>([...new Set(inscriptions.map(i => i.user))])
+  const tournaments = ref<string[]>([...new Set(inscriptions.map(i => i.tournament))])
+  const places = ref<string[]>([...new Set(inscriptions.map(i => i.place))])
+
+  const selectedUsers = ref<string[]>([])
+  const selectedTournaments = ref<string[]>([])
+  const selectedPlaces = ref<string[]>([])
 
   const filterTable = () => {
-    console.log("filtrando...");
-    inscripcionesShown.value = inscriptions.value.filter(inscription => {
+    inscriptionsShown.value = inscriptions.filter(inscription => {
       return (
-        selectedUsers.value.some(su => su.user === inscription.user) &&
-        selectedTournaments.value.some(su => su.tournament === inscription.tournament) &&
-        selectedPlaces.value.some(su => su.place === inscription.place)
+        (selectedUsers.value.length === 0 || selectedUsers.value.some(user => user === inscription.user)) &&
+        (selectedTournaments.value.length === 0 || selectedTournaments.value.some(tournament => tournament === inscription.tournament)) &&
+        (selectedPlaces.value.length === 0 || selectedPlaces.value.some(place => place === inscription.place))
       )
     })
   }
