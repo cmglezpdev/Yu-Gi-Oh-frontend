@@ -1,13 +1,64 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
-  { path: '/auth/signin', component: () => import('@/modules/auth/pages/SignInPage.vue') },
-  { path: '/auth/signout', component: () => import('@/modules/auth/pages/SignOutPage.vue') },
+
+  {
+    path: '/auth',
+    component: () => import('@/modules/auth/Auth.vue'),
+    children: [
+      { path: 'signin', component: () => import('@/modules/auth/pages/SignInPage.vue') },
+      { path: 'signup', component: () => import('@/modules/auth/pages/SignOutPage.vue') },
+    ]
+  },
+  {
+    path: '/',
+    component: () => import('@/modules/layout/Layout.vue'),
+    children: [
+      {
+        path: 'my-decks',
+        children: [
+          {
+            path: ':id',
+            component: () => import('@/modules/user-data/Decks.vue'),
+            children: [
+              {
+                path: 'general',
+                component: () => import('@/modules/user-data/DecksGeneral.vue')
+              },
+              {
+                path: 'table',
+                component: () => import('@/modules/user-data/DecksTable.vue')
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'my-tournaments',
+        children: [
+          {
+            path: ':id',
+            component: () => import('@/modules/user-tournaments/TournamentInfo.vue'),
+            children: [
+              {
+                path: 'general',
+                component: () => import('@/modules/user-data/DecksGeneral.vue')
+              },
+              {
+                path: 'table',
+                component: () => import('@/modules/user-data/DecksTable.vue')
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   { path: '/:pathMatch(.*)*', component: () => import('@/modules/shared/pages/NotPageFound.vue') },
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

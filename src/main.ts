@@ -7,6 +7,8 @@ import AppVue from './App.vue'
 // import 'primevue/resources/themes/md-dark-deeppurple/theme.css'
 import 'primevue/resources/themes/md-light-deeppurple/theme.css'
 import 'primeicons/primeicons.css'
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
 
 const app = createApp(AppVue)
 
