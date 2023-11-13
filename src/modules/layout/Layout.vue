@@ -18,13 +18,13 @@
 
     <Sidebar v-model:visible="visible">
       <div class="flex w-full flex-col justify-center m-3 gap-4">
-        <h2 class="flex justify-center">{{userdata.name}}</h2>
-        <h3 class="flex justify-center">{{userdata.email}}</h3>
 
         <div class="flex justify-center">
           <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" icon="pi pi-user"
             class=" mr-2 usericon" size="xlarge" shape="circle" />
         </div>
+        <h2 class="flex justify-center">{{userdata.name}}</h2>
+        <h3 class="flex justify-center">{{userdata.email}}</h3>
 
      <div class="flex justify-center">
 

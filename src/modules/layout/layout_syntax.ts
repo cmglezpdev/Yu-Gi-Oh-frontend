@@ -15,12 +15,12 @@ const items = ref([
       {
         label: 'Torneos',
         icon: 'pi pi-tag',
-        route: `/my-tournaments/${userdata.id}/general`
+        route: `/my-tournaments/${userdata.id}/aprobed`
       },
       {
         label: 'Estadisticas',
         icon: 'pi pi-chart-bar',
-        route: '/my-tournaments'
+        route: `/my-stadistics/${userdata.id}`
       },
     ]
   },

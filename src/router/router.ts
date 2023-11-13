@@ -41,14 +41,31 @@ const routes = [
             component: () => import('@/modules/user-tournaments/TournamentInfo.vue'),
             children: [
               {
-                path: 'general',
-                component: () => import('@/modules/user-data/DecksGeneral.vue')
+                path: 'aprobed',
+                component: () => import('@/modules/user-tournaments/aprobed/AprobedTable.vue')
               },
               {
-                path: 'table',
-                component: () => import('@/modules/user-data/DecksTable.vue')
-              }
+                path: 'past',
+                component: () => import('@/modules/user-tournaments/past/PastTable.vue')
+              },
+              {
+                path: 'rejected',
+                component: () => import('@/modules/user-tournaments/rejected/RejectedTable.vue')
+              },
+              {
+                path: 'pending',
+                component: () => import('@/modules/user-tournaments/pending/PendingTable.vue')
+              },
             ]
+          }
+        ]
+      },
+      {
+        path: 'my-stadistics',
+        children: [
+          {
+            path: ':id',
+            component: () => import('@/modules/stadistics/Stadistics.vue'),
           }
         ]
       }

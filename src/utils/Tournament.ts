@@ -5,3 +5,7 @@ export interface Tournament{
   deckName:string,
   deckId:string
 }
+
+export interface PastTournament extends Tournament{
+  winned:boolean;
+}

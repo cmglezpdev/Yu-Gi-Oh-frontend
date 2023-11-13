@@ -3,7 +3,7 @@
     <div class="grid-container">
       <Skeleton size="20rem" v-for="index in 100" v-if="loading"></Skeleton>
 
-      <Card style="width: 20rem" v-for="(deck, index) in  decks.deckList">
+      <Card style="width: 20rem" v-for="(deck, index) in  decks.deckList" v-animateonscroll="{ enterClass: 'flipup', leaveClass: 'fadeout' }">
         <template #content>
           <div class="flex flex-col gap-3 relative">
 
@@ -116,5 +116,31 @@ watch(() => {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+@keyframes slidedown-icon {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.slidedown-icon {
+    animation: slidedown-icon;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+}
+
+.box {
+    background-image: radial-gradient(var(--primary-300), var(--primary-600));
+    border-radius: 50% !important;
+    color: var(--primary-color-text);
 }
 </style>
