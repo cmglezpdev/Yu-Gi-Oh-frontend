@@ -70,7 +70,6 @@ const routes = [
       }
     ]
   },
->>>>>>> invento
   { path: '/:pathMatch(.*)*', component: () => import('@/modules/shared/pages/NotPageFound.vue') },
 ]
 
