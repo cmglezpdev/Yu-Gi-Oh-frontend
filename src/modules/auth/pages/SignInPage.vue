@@ -1,54 +1,63 @@
 <template>
-  <section class='w-[500px] mx-auto mt-20 p-5 border border-violet-500'>
-    <header class='w-full text-center text-4xl'>
-      <h1>Inicia Sesión</h1>
-    </header>
+  <div class="card flex flex-col gap-3">
 
-    <form class='flex flex-col gap-5 mt-10'>
-      <fieldset class='flex flex-col'>
-        <label for='email'>Correo electrónico</label>
-        <span class='p-input-icon-left'>
-          <i class='pi pi-at text-xl' />
-          <InputText 
-            id='email' 
-            type='email' 
-            placeholder='ejemplo@correo.com' 
-            class='w-full'
-          />
-        </span>
-      </fieldset>
-      
-      <fieldset class='flex flex-col'>
-        <label for='password'>Contraseña</label>
-        <span class='p-input-icon-right p-input-icon-left'>
-          <i class='pi pi-lock text-xl' />
-          <InputText 
-          id='password' 
-          type='password' 
-          placeholder='********' 
-          class='w-full'
-          />
-          <i class='pi pi-eye text-xl' />
-        </span>
-      </fieldset>
+    <h1>Inicia Sesion</h1>
+    <InputGroup>
+      <span class="p-float-label">
+        <InputText id="email" v-model="loginForm.email" />
+        <label for="email">Email</label>
+      </span>
+    </InputGroup>
 
-      <fieldset class='mt-6'>
-        <Buttonn type='submit' label='Iniciar sesión' class='w-full' />
-      </fieldset>
-    </form>
+    <InputGroup>
+      <InputText :type="isPass1 ? 'password' : 'text'" placeholder="Password" v-model="loginForm.password" />
+      <InputGroupAddon @click="isPass1 = !isPass1">
+        <i class="pi pi-eye-slash" :class="{ 'pi-eye-slash': isPass1, 'pi-eye': !isPass1 }"></i>
+      </InputGroupAddon>
+    </InputGroup>
 
-    <footer>
-      <p class='text-center mt-5'>
-        ¿No tienes cuenta? 
-        <router-link to='/auth/signup' class='text-violet-500'>
-          Regístrate
-        </router-link>
-      </p>
-    </footer>
-  </section>
+    <Button class="accept-button" label="Aceptar" />
+
+    <div class="flex flex-row justify-start">
+      Aun no tienes cuenta?
+      <router-link to="signup"> crea una cuenta </router-link>
+    </div>
+  </div>
 </template>
 
-<script lang='ts' setup>
-  import InputText from 'primevue/inputtext'
-  import Buttonn from 'primevue/button'
+<script setup>
+
+import InputText from 'primevue/inputtext';
+import InputGroup from 'primevue/inputgroup';
+import InputGroupAddon from 'primevue/inputgroupaddon';
+import Button from 'primevue/button';
+
+import { ref, reactive } from 'vue';
+
+const loginForm = reactive({
+  email: null,
+  password: null
+})
+
+const isPass1 = ref(true);
+
 </script>
+
+<style scoped>
+.card {
+  display: flex;
+  flex-direction: column;
+  /* row-gap: 4; */
+  width: 50%;
+  height: 59%;
+  padding: 20px;
+  gap: 3%;
+  border: 1px lightgray solid;
+  border-radius: 10px;
+  box-shadow: 1px 1px 10px gray;
+}
+
+.accept-button {
+  width: 100%;
+}
+</style>
