@@ -17,10 +17,14 @@
   </div>
   <router-view></router-view>
   <Teleport to="body">
-  <div class="fixed top-0 left-0 h-screen w-screen">
+  <div class="fixed bottom-0 right-0">
 <SpeedDial :model="items_panel" :radius="120" type="quarter-circle" direction="up-left" :tooltipOptions="{ position: 'left' }"  :style="{ right: 0, bottom: 0 }" />
-  <Dialog v-model:visible="active_modal_create" maximizable modal header="Header" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-        <DeckEdit :isModeEdit="false" @evento-hijo-padre="manejarEventoHijoPadre" />
+  <Dialog v-model:visible="active_modal_create" maximizable modal header="" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+        <DeckEdit ref='deckModal' :isModeEdit="false"
+          @deckCreated="handleDeckCreation"
+          @deckEdited="handleDeckEdition"
+          @close="handleModalClose"
+        />
         </Dialog>
   </div>
   </Teleport>
@@ -39,19 +43,27 @@ import { useToast } from 'primevue/usetoast';
 import { useRoute } from 'vue-router';
 import { ref, watch,inject } from 'vue';
 
-const manejarEventoHijoPadre = (mensaje) => {
-  alert();
-};
 
 const toast = useToast();
 const route = useRoute();
 const id = ref(null);
 const active_modal_create = ref(false);
+const deckModal = ref(null);
 
 
 watch(() => {
   id.value = route.params.id;
 })
+
+const handleDeckCreation =(resp)=>{
+  toast.add({ severity: 'info', summary: 'Deck creado', detail: 'Data Added' });
+}
+const handleDeckEdition =(resp)=>{
+  toast.add({ severity: 'info', summary: 'Deck editado', detail: 'Data Added' });
+}
+const handleModalClose =(resp)=>{
+  active_modal_create.value=false;
+}
 
 const items_panel = ref([
     {
@@ -60,7 +72,6 @@ const items_panel = ref([
         toast:'crear deck',
         command: () => {
              active_modal_create.value=true;
-            toast.add({ severity: 'info', summary: 'Add', detail: 'Data Added' });
         }
     },
     {

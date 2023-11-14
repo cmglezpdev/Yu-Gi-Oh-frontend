@@ -1,16 +1,5 @@
 // services.js
-import { ref,reactive } from 'vue';
-
-const sharedData = ref('Datos compartidos');
-
-const decks= reactive({
-  deckList:[]
-})
-
-const fetchUserDecks = (userId:string)=>{
-  return new Promise((resolve)=>{
-    setTimeout(()=>{
-        resolve(
+const decks= 
     [
     {
       title:'deck1',
@@ -80,9 +69,26 @@ const fetchUserDecks = (userId:string)=>{
       cardCount:32,
     },
   ]
+
+const fetchUserDecks = (userId:string)=>{
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+        resolve(
+        decks
       )
     },3000)
   })
 }
 
-export { fetchUserDecks};
+
+function addUserDeck(deck:any){
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+        resolve(
+        decks.push(deck)
+      )
+    },3000)
+  })
+}
+
+export { fetchUserDecks,addUserDeck};
