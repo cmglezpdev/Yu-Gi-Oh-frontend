@@ -3,7 +3,8 @@
     <div class="grid-container">
       <Skeleton size="20rem" v-for="index in 100" v-if="loading"></Skeleton>
 
-      <Card style="width: 20rem" v-for="(deck, index) in  decks.deckList" v-animateonscroll="{ enterClass: 'flipup', leaveClass: 'fadeout' }">
+      <Card style="width: 20rem" v-for="(deck, index) in  decks.deckList"
+        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
         <template #content>
           <div class="flex flex-col gap-3 relative">
 
@@ -15,23 +16,31 @@
 
             <div class="absolute top-0 w-full h-full" @mouseover="mostrarMenu(index)" @mouseleave="quitarMenu()">
               <transition name="fade" mode="out-in">
-                <div v-if="index == activeMenu" class="flex items-end h-full w-full  ">
-                  <div class="flex flex-col w-full inset-0 bg-gray-500 bg-opacity-20 backdrop-blur-md">
-                    <div class="w-full border">
-                      <h3 class="text-cyan-500 text-center text-2xl m-4">Main Deck: {{ deck.cardCount }} </h3>
-                    </div>
-                    <div class="w-full border flex flex-row ">
+                <div v-if="index == activeMenu" class="h-full flex justify-start flex-col">
+                  <div class="flex flex-row w-full justify-between">
+                     <Button icon="pi pi-trash"  severity="danger"/>
+                     <Button icon="pi pi-pencil" />
+                  </div>
+                  <div class="flex items-end h-full w-full  ">
+                    <div class="flex flex-col w-full inset-0 bg-gray-500 bg-opacity-20 backdrop-blur-md">
                       <div class="w-full border">
-                        <h3 class="text-cyan-300 text-center text-2xl m-4">Side Deck: {{ deck.sideDeck.cardCount }} </h3>
+                        <h3 class="text-cyan-500 text-center text-2xl m-4">Main Deck: {{ deck.cardCount }} </h3>
+                      </div>
+                      <div class="w-full border flex flex-row ">
+                        <div class="w-full border">
+                          <h3 class="text-cyan-300 text-center text-2xl m-4">Side Deck: {{ deck.sideDeck.cardCount }}
+                          </h3>
+                        </div>
+                        <div class="w-full border">
+                          <h3 class="text-cyan-300 text-center text-2xl m-4">Extra Deck: {{ deck.extraDeck.cardCount }}
+                          </h3>
+                        </div>
                       </div>
                       <div class="w-full border">
-                        <h3 class="text-cyan-300 text-center text-2xl m-4">Extra Deck: {{ deck.extraDeck.cardCount }} </h3>
+                        <!-- <router-link to="/"> -->
+                        <!--   <h3 class="text-cyan-300 text-center text-2xl m-4">Ver Detalles </h3> -->
+                        <!-- </router-link> -->
                       </div>
-                    </div>
-                    <div class="w-full border">
-                      <router-link to="/">
-                        <h3 class="text-cyan-300 text-center text-2xl m-4">Ver Detalles </h3>
-                      </router-link>
                     </div>
                   </div>
                 </div>
@@ -51,7 +60,11 @@ import { useRoute } from 'vue-router';
 import Skeleton from 'primevue/skeleton';
 import { fetchUserDecks } from '@/utils/deck.service.ts'
 import Card from 'primevue/card';
+import Button from 'primevue/button';
 import { reactive, ref, watch } from 'vue';
+import Dialog from 'primevue/dialog';
+import DeckEdit from './DeckEdit.vue';
+import { useToast } from 'primevue/usetoast';
 const route = useRoute();
 const id = ref(null);
 const activeMenu = ref(-1);
@@ -59,6 +72,9 @@ const activeMenu = ref(-1);
 const decks = reactive({
   deckList: []
 })
+
+const active_modal_create=ref(true);
+
 
 const loading = ref(true);
 
@@ -76,10 +92,29 @@ const quitarMenu = () => {
   activeMenu.value = -1;
 }
 
+const emit = defineEmits();
+
+const editDeck=(deckId)=>{
+    emit('editDeck',deckId);
+}
+const deleteDeck=(deckId)=>{
+    emit('deleteDeck',deckId);
+}
+
 
 watch(() => {
   id.value = route.value;
 })
+
+const handleDeckCreation = (resp) => {
+  toast.add({ severity: 'info', summary: 'Deck creado', detail: 'Data Added' });
+}
+const handleDeckEdition = (resp) => {
+  toast.add({ severity: 'info', summary: 'Deck editado', detail: 'Data Added' });
+}
+const handleModalClose = (resp) => {
+  active_modal_create.value = false;
+}
 </script>
 
 <style scoped>
@@ -111,36 +146,40 @@ watch(() => {
   padding: 16px;
   border: 1px solid #ddd;
 }
-.fade-enter-active, .fade-leave-active {
+
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to {
+
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
 @keyframes slidedown-icon {
-    0% {
-        transform: translateY(0);
-    }
+  0% {
+    transform: translateY(0);
+  }
 
-    50% {
-        transform: translateY(10px);
-    }
+  50% {
+    transform: translateY(10px);
+  }
 
-    100% {
-        transform: translateY(0);
-    }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .slidedown-icon {
-    animation: slidedown-icon;
-    animation-duration: 5s;
-    animation-iteration-count: infinite;
+  animation: slidedown-icon;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
 }
 
+
 .box {
-    background-image: radial-gradient(var(--primary-300), var(--primary-600));
-    border-radius: 50% !important;
-    color: var(--primary-color-text);
-}
-</style>
+  background-image: radial-gradient(var(--primary-300), var(--primary-600));
+  border-radius: 50% !important;
+  color: var(--primary-color-text);
+}</style>

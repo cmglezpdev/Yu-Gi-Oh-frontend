@@ -18,7 +18,8 @@
   <router-view></router-view>
   <Teleport to="body">
   <div class="fixed bottom-0 right-0">
-<SpeedDial :model="items_panel" :radius="120" type="quarter-circle" direction="up-left" :tooltipOptions="{ position: 'left' }"  :style="{ right: 0, bottom: 0 }" />
+<SpeedDial @click="createDeck" :model="items_panel" :radius="120" type="quarter-circle" direction="up-left" :tooltipOptions="{ position: 'left' }"  :style="{ right: 0, bottom: 0 }" />
+<!-- <Badge value="+" @click="active_modal_create.value=true" size="xlarge" class="" severity="success"></Badge> -->
   <Dialog v-model:visible="active_modal_create" maximizable modal header="" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <DeckEdit ref='deckModal' :isModeEdit="false"
           @deckCreated="handleDeckCreation"
@@ -104,4 +105,9 @@ const items = ref([
     route: `/my-decks/${id.value}/table`
   },
 ]);
+
+
+const createDeck=()=>{
+             active_modal_create.value=true;
+}
 </script>

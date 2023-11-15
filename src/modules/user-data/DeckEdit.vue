@@ -1,43 +1,67 @@
 <template>
-  <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"
-    aria-label="Custom ProgressSpinner" v-if="isLoading" />
-  <div class="flex flex-row w-full justify-center text-lg">
-    <h1>{{ isModeEdit ? 'Editar Carta' : 'Crear Carta' }}</h1>
+  <div class="relative">
+    <div v-if="isLoading" class="fixed w-full h-screen z-50">
+      <div class="flex justify-center h-96 items-center">
+        <ProgressSpinner style="width: 80px; height: 80px" strokeWidth="8" fill="var(--surface-ground)"
+          animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+      </div>
+    </div>
+    <div class="flex flex-row w-full justify-center text-lg">
+      <h1>{{ isModeEdit ? 'Editar Carta' : 'Crear Carta' }}</h1>
+    </div>
+    <form class="w-full flex flex-col gap-4 p-6"> <span class="p-float-label ">
+        <InputText v-model="deck_create_form.title.value" :disabled="!deck_create_form.title.enabled"
+          :class="{ 'p-invalid': !deck_create_form.title.valid, 'p-valid': deck_create_form.title.valid }" class="w-full"
+          type="text" placeholder="Normal" @click="deck_create_form.title.touched = true" />
+        <label for="number-input">Nombre del deck</label>
+        <transition name="fade" mode="out-in">
+          <div v-if="!deck_create_form.title.valid" class="text-red-700">campo requerido</div>
+        </transition>
+      </span>
+
+      <span class="p-float-label ">
+        <AutoComplete v-model="deck_create_form.archetype.value" :disabled="!deck_create_form.archetype.enabled"
+          class="w-full" :class="{ 'p-invalid': !deck_create_form.archetype.valid }" :suggestions="items"
+          @complete="search" inputStyle="width: 100%;" @click="deck_create_form.archetype.touched = true" />
+        <label for="number-input">Arquetipo</label>
+        <transition name="fade" mode="out-in">
+          <div v-if="!deck_create_form.archetype.valid" class="text-red-700">campo requerido</div>
+        </transition>
+      </span>
+
+      <span class="p-float-label">
+        <InputNumber id="number-input" class="w-full" v-model="deck_create_form.cardCount.value"
+          :disabled="!deck_create_form.cardCount.enabled" :class="{ 'p-invalid': !deck_create_form.cardCount.valid }"
+          @click="deck_create_form.cardCount.touched = true" />
+        <label for="number-input">cartas en el deck</label>
+        <transition name="fade" mode="out-in">
+          <div v-if="!deck_create_form.cardCount.valid" class="text-red-700">campo requerido</div>
+        </transition>
+      </span>
+      <span class="p-float-label">
+        <InputNumber id="number-input" class="w-full" v-model="deck_create_form.sideDeck.cardCount.value"
+          :disabled="!deck_create_form.sideDeck.cardCount.enabled"
+          :class="{ 'p-invalid': !deck_create_form.sideDeck.cardCount.valid }"
+          @click="deck_create_form.sideDeck.cardCount.touched = true" />
+        <label for="number-input">cartas en el side deck</label>
+        <transition name="fade" mode="out-in">
+          <div v-if="!deck_create_form.sideDeck.cardCount.valid" class="text-red-700">campo requerido</div>
+        </transition>
+      </span>
+      <span class="p-float-label">
+        <InputNumber id="number-input" class="w-full" v-model="deck_create_form.extraDeck.cardCount.value"
+          :disabled="!deck_create_form.extraDeck.cardCount.enabled"
+          :class="{ 'p-invalid': !deck_create_form.extraDeck.cardCount.valid }"
+          @click="deck_create_form.extraDeck.cardCount.touched = true" />
+        <transition name="fade" mode="out-in">
+          <div v-if="!deck_create_form.extraDeck.cardCount.valid" class="text-red-700">campo requerido</div>
+        </transition>
+        <label for="number-input">cartas en el extra deck</label>
+      </span>
+      <Button @click="onSubmit" :label="isModeEdit ? 'Editar Deck' : 'Crear Deck'" icon="pi pi-check"
+        :disabled="deck_create_form.invalid" />
+    </form>
   </div>
-  <form class="w-full flex flex-col gap-4 p-6"> <span class="p-float-label ">
-      <InputText v-model="deck_create_form.title.value" :disabled="!deck_create_form.title.enabled"
-        :class="{ 'p-invalid': !deck_create_form.title.valid, 'p-valid': deck_create_form.title.valid }" class="w-full"
-        type="text" placeholder="Normal" />
-      <label for="number-input">Nombre del deck</label>
-    </span>
-
-    <span class="p-float-label ">
-      <AutoComplete v-model="deck_create_form.archetype.value" :disabled="!deck_create_form.archetype.enabled"
-        class="w-full" :class="{ 'p-invalid': !deck_create_form.archetype.valid }" :suggestions="items"
-        @complete="search" inputStyle="width: 100%;" />
-      <label for="number-input">Arquetipo</label>
-    </span>
-
-    <span class="p-float-label">
-      <InputNumber id="number-input" class="w-full" v-model="deck_create_form.cardCount.value"
-        :disabled="!deck_create_form.cardCount.enabled" :class="{ 'p-invalid': !deck_create_form.cardCount.valid }" />
-      <label for="number-input">cartas en el deck</label>
-    </span>
-    <span class="p-float-label">
-      <InputNumber id="number-input" class="w-full" v-model="deck_create_form.sideDeck.cardCount.value"
-        :disabled="!deck_create_form.sideDeck.cardCount.enabled"
-        :class="{ 'p-invalid': !deck_create_form.sideDeck.cardCount.valid }" />
-      <label for="number-input">cartas en el side deck</label>
-    </span>
-    <span class="p-float-label">
-      <InputNumber id="number-input" class="w-full" v-model="deck_create_form.extraDeck.cardCount.value"
-        :disabled="!deck_create_form.extraDeck.cardCount.enabled"
-        :class="{ 'p-invalid': !deck_create_form.extraDeck.cardCount.valid }" />
-      <label for="number-input">cartas en el extra deck</label>
-    </span>
-    <Button @click="onSubmit" :label="isModeEdit ? 'Editar Deck' : 'Crear Deck'" icon="pi pi-check"
-      :disabled="deck_create_form.invalid" />
-  </form>
 </template>
 <script setup>
 import AutoComplete from 'primevue/autocomplete';
@@ -59,6 +83,7 @@ const props = defineProps({
 })
 
 const validatorRequired = (elem) => elem != null;
+
 const validatorMin = (minv) => {
   return (elem) => elem >= minv;
 }
@@ -70,18 +95,21 @@ const deck_create_form = reactive({
     value: null,
     valid: true,
     enabled: true,
+    touched: false,
     validators: [validatorRequired]
   },
   archetype: {
     value: null,
     valid: true,
     enabled: true,
+    touched: false,
     validators: [validatorRequired]
   },
   cardCount: {
     value: null,
     valid: true,
     enabled: true,
+    touched: false,
     validators: [validatorRequired, validatorMin(0)]
   },
   extraDeck: {
@@ -89,6 +117,7 @@ const deck_create_form = reactive({
       value: null,
       valid: true,
       enabled: true,
+      touched: false,
       validators: [validatorRequired, validatorMin(0)]
     }
   },
@@ -97,6 +126,7 @@ const deck_create_form = reactive({
       value: null,
       valid: true,
       enabled: true,
+      touched: false,
       validators: [validatorRequired, validatorMin(0)]
     }
   },
@@ -134,7 +164,7 @@ const checkValidity = (form) => {
       for (let validator of form[field]['validators']) {
         validity = validity && validator(form[field]['value'])
       }
-      form[field]['valid'] = validity;
+      form[field]['valid'] = !form[field]['touched'] || validity;
       isvalid = isvalid && validity;
     } else {
       isvalid = checkValidity(form[field]) && isvalid;
@@ -159,14 +189,14 @@ const onSubmit = async () => {
     disableForm(deck_create_form);
 
     const deck = {
-      title:deck_create_form.title.value,
-      arquetype:deck_create_form.archetype.value,
-      cardCount:deck_create_form.cardCount.value,
-      sideDeck:{
-        cardCount:deck_create_form.sideDeck.cardCount.value
+      title: deck_create_form.title.value,
+      arquetype: deck_create_form.archetype.value,
+      cardCount: deck_create_form.cardCount.value,
+      sideDeck: {
+        cardCount: deck_create_form.sideDeck.cardCount.value
       },
-      extraDeck:{
-        cardCount:deck_create_form.extraDeck.cardCount.value
+      extraDeck: {
+        cardCount: deck_create_form.extraDeck.cardCount.value
       }
     }
 
@@ -177,18 +207,29 @@ const onSubmit = async () => {
 }
 const items = ref([]);
 
-onMounted(()=>{
-fetchArchetypes();
+onMounted(() => {
+  fetchArchetypes();
 })
 
 const search = async (event) => {
-  const {query} = event;
-  isLoading.value=true;
+  const { query } = event;
+  isLoading.value = true;
   const all = await fetchArchetypes();
-  isLoading.value=false;
-  items.value = all.filter(elem=> elem.name.toLowerCase().includes(query.toLowerCase())).map(elem=>elem.name);
+  isLoading.value = false;
+  items.value = all.filter(elem => elem.name.toLowerCase().includes(query.toLowerCase())).map(elem => elem.name);
 }
 // disableForm(deck_create_form)
 checkValidity(deck_create_form);
 
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1.9s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}</style>
