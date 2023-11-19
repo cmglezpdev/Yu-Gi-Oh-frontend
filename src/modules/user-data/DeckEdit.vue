@@ -69,18 +69,20 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
-import { ref, watch, reactive, toRefs, onMounted } from 'vue';
-import { addUserDeck } from '@/utils/deck.service';
+import { ref, watch,defineProps, reactive, toRefs, onMounted } from 'vue';
+import {  editUserDeck,addUserDeck , getDeckInfo } from '@/utils/deck.service';
 import { fetchArchetypes } from '@/utils/archetype.service';
 
 const emit = defineEmits();
 
 const isLoading = ref(false);
 
-
 const props = defineProps({
-  isModeEdit: Boolean,
-})
+   isModeEdit:Boolean,
+   deckId:String
+});
+
+const {isModeEdit,deckId} = toRefs(props);
 
 const validatorRequired = (elem) => elem != null;
 
@@ -88,7 +90,6 @@ const validatorMin = (minv) => {
   return (elem) => elem >= minv;
 }
 
-const { isModeEdit } = toRefs(props);
 
 const deck_create_form = reactive({
   title: {
@@ -179,9 +180,44 @@ watch(() => {
   deck_create_form.invalid = !deck_create_form.valid;
 })
 
+if(isModeEdit.value)
+{
+    isLoading.value = true;
+  disableForm(deck_create_form);
+  getDeckInfo(deckId.value)
+  .then(
+      (resp)=>{
+    isLoading.value = false;
+          deck_create_form.title.value=resp.title
+          deck_create_form.archetype.value=resp.arquetype;
+          deck_create_form.cardCount.value=resp.cardCount;
+          deck_create_form.sideDeck.cardCount.value=resp.cardCount;
+          deck_create_form.extraDeck.cardCount.value=resp.cardCount;
+        enableForm(deck_create_form);
+        checkValidity(deck_create_form)
+      }
+    )
+}
+
 const onSubmit = async () => {
 
   if (isModeEdit.value) {
+    isLoading.value = true;
+    disableForm(deck_create_form);
+
+    const deck = {
+      deckId,
+      title: deck_create_form.title.value,
+      arquetype: deck_create_form.archetype.value,
+      cardCount: deck_create_form.cardCount.value,
+      sideDeck: {
+        cardCount: deck_create_form.sideDeck.cardCount.value
+      },
+      extraDeck: {
+        cardCount: deck_create_form.extraDeck.cardCount.value
+      }
+    }
+    await editUserDeck(deck);
     emit('deckEdited');
   } else {
 

@@ -55,6 +55,10 @@ const routes = [
                 path: 'pending',
                 component: () => import('@/modules/user-tournaments/pending/PendingTable.vue')
               },
+              {
+                path: 'pick',
+                component: () => import('@/modules/user-tournaments/pick/PickTable.vue')
+              },
             ]
           }
         ]
@@ -67,11 +71,31 @@ const routes = [
             component: () => import('@/modules/stadistics/Stadistics.vue'),
           }
         ]
+      },
+      {
+        path: 'admin',
+        children: [
+          {
+            path: 'users',
+            component: () => import('@/modules/admin_panel/usersTable.vue'),
+          },
+          {
+            path: 'tournaments',
+            children: [
+              {
+                path: '',
+                component: () => import('@/modules/admin_panel/TournamentAdminTable.vue'),
+              },
+              {
+                path: ':id',
+                component: () => import('@/modules/admin_panel/ManageTournament.vue'),
+              }
+            ]
+          }
+        ]
       }
     ]
   },
-  { path: '/auth/signin', component: () => import('@/modules/auth/pages/SignInPage.vue') },
-  { path: '/auth/signup', component: () => import('@/modules/auth/pages/SignUpPage.vue') },
 
   { path: '/profile/:username', component: () => import('@/modules/profile/pages/ProfileTournamentsPage.vue') },
   { path: '/profile/:username/tournaments', component: () => import('@/modules/profile/pages/ProfileTournamentsPage.vue') },

@@ -2,6 +2,7 @@
 const decks= 
     [
     {
+      id:'klkl',
       title:'deck1',
       arquetype:'arquetipo1',
       image:'src/assets/deck.jpeg',      
@@ -14,6 +15,7 @@ const decks=
       cardCount:32,
     },
     {
+      id:'klkl',
       title:'deck1',
       arquetype:'arquetipo1',
       sideDeck:{
@@ -25,6 +27,7 @@ const decks=
       cardCount:32,
     },
     {
+      id:'klkl',
       title:'deck1',
       arquetype:'arquetipo1',
       sideDeck:{
@@ -36,6 +39,7 @@ const decks=
       cardCount:32,
     },
     {
+      id:'klkl',
       title:'deck1',
       arquetype:'arquetipo1',
       sideDeck:{
@@ -47,6 +51,7 @@ const decks=
       cardCount:32,
     },
     {
+      id:'klkl',
       title:'deck1',
       arquetype:'arquetipo1',
       sideDeck:{
@@ -58,6 +63,7 @@ const decks=
       cardCount:32,
     },
     {
+      id:'klkl',
       title:'deck1',
       arquetype:'arquetipo1',
       sideDeck:{
@@ -86,6 +92,38 @@ function addUserDeck(deck:any){
     setTimeout(()=>{
         resolve(
         decks.push(deck)
+      )
+    },3000)
+  })
+}
+
+export async function editUserDeck(deckId:string,deck:any){
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+        resolve(
+        decks.push(deck)
+      )
+    },3000)
+  })
+}
+
+
+export async function getDeckInfo(deckId:string){
+     
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+        resolve(
+        decks[0]
+      )
+    },3000)
+  })
+}
+export async function removeUserDeck(deckId:string){
+     
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+        resolve(
+        decks.splice(0,1)
       )
     },3000)
   })

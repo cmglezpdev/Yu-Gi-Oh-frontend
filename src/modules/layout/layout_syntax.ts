@@ -1,7 +1,18 @@
 import { ref } from "vue";
+import { getUserData} from '@/utils/user.service';
+import {logout} from '@/utils/auth.service';
+const userdata=getUserData()
 
-import { userdata} from '@/utils/user.service';
+let redirect:any;
 
+export const setRedirection=(newRedirection:any)=>{
+     redirect= newRedirection;
+}
+
+const quitSession=()=>{
+  logout();
+  redirect();
+}
 const items = ref([
   {
     label: 'Informacion del perfil',
@@ -18,7 +29,7 @@ const items = ref([
         route: `/my-tournaments/${userdata.id}/aprobed`
       },
       {
-        label: 'Estadisticas',
+        label: 'Informacion del usuario',
         icon: 'pi pi-chart-bar',
         route: `/my-stadistics/${userdata.id}`
       },
@@ -31,12 +42,12 @@ const items = ref([
       {
         label: 'Gestionar Usuarios',
         icon: 'pi pi-user-edit',
-        route: '/my-decks'
+        route: '/admin/users'
       },
       {
         label: 'Gestionar Torneos',
         icon: 'pi pi-desktop',
-        route: '/my-tournaments'
+        route: '/admin/tournaments'
       },
     ]
   },
@@ -47,7 +58,7 @@ const items = ref([
         label: 'Cerrar sesion',
         icon: 'pi pi-sign-out',
         command: () => {
-          alert('cerrando sesion')
+          quitSession();
         }
       }
     ]

@@ -14,6 +14,7 @@
             type='text' 
             placeholder='Jhon Doe' 
             class='w-full'
+              v-model="name"
           />
         </span>
       </fieldset>
@@ -27,6 +28,7 @@
             type='email' 
             placeholder='ejemplo@correo.com' 
             class='w-full'
+              v-model="email"
           />
         </span>
       </fieldset>
@@ -41,6 +43,7 @@
               type='password' 
               placeholder='********' 
               class='w-full'
+              v-model="password"
             />
           </span>
         </div>
@@ -53,6 +56,7 @@
               type='password' 
               placeholder='********' 
               class='w-full'
+              v-model="passwordConfirm"
             />
           </span>
 
@@ -85,7 +89,7 @@
       </fieldset>
 
       <fieldset class='mt-6'>
-        <Buttonn type='submit' label='Registrarse' class='w-full' />
+        <Buttonn type='submit' :disabled="!valid" label='Registrarse' class='w-full' />
       </fieldset>
     </form>
     
@@ -106,9 +110,45 @@
   import Buttonn from 'primevue/button'
   import InputText from 'primevue/inputtext'
   import Dropdown from 'primevue/dropdown' 
+import {FormBuilder,Validators,FormGroup, AbstractControl} from '@/reactive_form_module/ReactiveFormModule';
+
+  const _formBuilder = new FormBuilder();
+
+  const samePasswordValidator = (param:AbstractControl)=>
+  {
+      if(signUpForm.value == param.value)
+      {
+      return null;
+    }
+    return {passwordMatch:true};
+  }
+
+  const signUpForm = _formBuilder.group({
+    name:[null,[Validators.required,Validators.minLength(4)]],
+    email:[null,[Validators.required,Validators.email]],    
+    password:[null,[Validators.required,Validators.minLength(6)]],
+    passwordConfirm:[null,[Validators.required,samePasswordValidator]]
+  })
+
+  console.log(signUpForm)
+  alert();
+
+   const name = signUpForm.get('name').realValue;
+   const email = signUpForm.get('email').realValue;
+   const password = signUpForm.get('password').realValue;
+   const passwordConfirm = signUpForm.get('passwordConfirm').realValue;
+  const valid = signUpForm.value;
+
+  signUpForm.valueChange(
+    (_param:any)=>{
+      console.log(signUpForm.value);
+    }
+  )
+
 
   const selectedProvince = ref(null)
   const selectedMunicipality = ref(null)
+
 
   const provinces = ref([
     {id: '1', name: 'Pinar del Rio'},

@@ -16,17 +16,18 @@
       <Column field="place" header="lugar" style="width: 25%">
       </Column>
 
-      <div v-if="loading" v-for="index in 8" :key="index" class="p-skeleton p-component">
+      <div v-if="loading" v-for="index in 5" :key="index" class="p-skeleton p-component">
         <div class="p-skeleton-row p-skeleton-row-indent"></div>
       </div>
+
     </DataTable>
+
   </div>
 </template>
 
 <script setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import Skeleton from 'primevue/skeleton';
 import { ref, onMounted } from 'vue';
 import { fetchUserAprovedTournaments } from '@/utils/userTournaments.service'
 import { formatDate } from '@/utils/date.service';

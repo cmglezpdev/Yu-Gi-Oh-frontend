@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full vh-full">
+  <div class="w-full vh-full ">
 
     <div class="card">
       <Toolbar>
@@ -17,32 +17,32 @@
     </div>
 
     <Sidebar v-model:visible="visible">
-      <div class="flex w-full flex-col justify-center m-3 gap-4">
+      <div class="flex overflow-x-hidden flex-col justify-center m-3 gap-4">
 
         <div class="flex justify-center">
           <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" icon="pi pi-user"
             class=" mr-2 usericon" size="xlarge" shape="circle" />
         </div>
-        <h2 class="flex justify-center">{{userdata.name}}</h2>
-        <h3 class="flex justify-center">{{userdata.email}}</h3>
+        <h2 class="flex justify-center">{{ userdata.name }}</h2>
+        <h3 class="flex justify-center">{{ userdata.email }}</h3>
 
-     <div class="flex justify-center">
+        <div class="flex justify-center">
 
-      <Menu :model="items" class="border-0 w-full">
-        <template #item="{ item, props }">
-          <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-            <a v-ripple :href="href" v-bind="props.action" @click="navigate">
-              <span :class="item.icon" />
-              <span class="ml-2">{{ item.label }}</span>
-            </a>
-          </router-link>
-          <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
-            <span :class="item.icon" />
-            <span class="ml-2">{{ item.label }}</span>
-          </a>
-        </template>
-      </Menu>
-        </div> 
+          <Menu :model="items" class="border-0 w-full">
+            <template #item="{ item, props }">
+              <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+                <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+                  <span :class="item.icon" />
+                  <span class="ml-2">{{ item.label }}</span>
+                </a>
+              </router-link>
+              <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
+                <span :class="item.icon" />
+                <span class="ml-2">{{ item.label }}</span>
+              </a>
+            </template>
+          </Menu>
+        </div>
       </div>
     </Sidebar>
 
@@ -59,9 +59,24 @@ import Menu from 'primevue/menu';
 import Avatar from 'primevue/avatar';
 import Toolbar from 'primevue/toolbar';
 import { ref } from 'vue';
-import {items,userdata} from './layout_syntax'
+import { items, userdata, setRedirection } from './layout_syntax';
+import { useRouter } from 'vue-router';
+const router = useRouter()
+
+setRedirection(
+  () => {
+    router.push(
+      {
+        path: '/auth/signin',
+        replace: true
+      }
+    );
+
+  }
+)
 
 const visible = ref(true);
+
 
 
 </script>

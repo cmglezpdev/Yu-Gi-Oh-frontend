@@ -27,6 +27,7 @@
 
 <script setup>
 import DataTable from 'primevue/datatable';
+import Skeleton from 'primevue/skeleton';
 import Column from 'primevue/column';
 import { ref, onMounted } from 'vue';
 import { fetchUserPastTournaments } from '@/utils/userTournaments.service'

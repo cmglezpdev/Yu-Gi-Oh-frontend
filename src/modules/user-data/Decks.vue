@@ -2,95 +2,96 @@
   <div class="flex flex-row justify-center">
     <TabMenu :model="items">
       <template #item="{ item, props }">
-        <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+        <router-link @click="loadData" v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
           <a v-ripple :href="href" v-bind="props.action" @click="navigate">
             <span :class="item.icon" />
             <span class="ml-2">{{ item.label }}</span>
           </a>
         </router-link>
-        <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
+        <a v-else v-ripple @click="loadData" :href="item.url" :target="item.target" v-bind="props.action">
           <span :class="item.icon" />
           <span class="ml-2">{{ item.label }}</span>
         </a>
       </template>
     </TabMenu>
   </div>
-  <router-view></router-view>
+  <router-view
+    @askReload="loadData"
+    :decks="decks" :loading="loading" @editDeck="activeDeckEdit($event)"
+    @removeDeck="activeRemoveDeck($event)"></router-view>
   <Teleport to="body">
-  <div class="fixed bottom-0 right-0">
-<SpeedDial @click="createDeck" :model="items_panel" :radius="120" type="quarter-circle" direction="up-left" :tooltipOptions="{ position: 'left' }"  :style="{ right: 0, bottom: 0 }" />
-<!-- <Badge value="+" @click="active_modal_create.value=true" size="xlarge" class="" severity="success"></Badge> -->
-  <Dialog v-model:visible="active_modal_create" maximizable modal header="" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-        <DeckEdit ref='deckModal' :isModeEdit="false"
-          @deckCreated="handleDeckCreation"
-          @deckEdited="handleDeckEdition"
-          @close="handleModalClose"
-        />
-        </Dialog>
-  </div>
+    <div class="fixed bottom-0 right-0">
+      <SpeedDial @click="createDeck" :model="items_panel" :radius="120" type="quarter-circle" direction="up-left"
+        :tooltipOptions="{ position: 'left' }" :style="{ right: 0, bottom: 0 }" />
+      <Dialog v-model:visible="active_modal_create" maximizable modal header="" :style="{ width: '50rem' }"
+        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+        <DeckEdit ref='deckModal' :isModeEdit="isModeEdit" :deckId="deckId" @deckCreated="handleDeckCreation"
+          @deckEdited="handleDeckEdition" @close="handleModalClose" />
+      </Dialog>
+      <Dialog v-model:visible="active_modal_remove" modal header="" :style="{ width: '30rem' }"
+        :breakpoints="{ '99px': '25vw', '575px': '90vw' }">
+        <DeckDelete @deckRemoved="handleDeckDeletion" :deckId="deckId" @close="handleModalClose" />
+      </Dialog>
+    </div>
   </Teleport>
   <Toast />
 </template>
 
 <script setup >
 import TabMenu from 'primevue/tabmenu';
+import DeckDelete from './DeckDelete.vue'
 import SpeedDial from 'primevue/speeddial';
 import Toast from 'primevue/toast';
 import Dialog from 'primevue/dialog';
 import DeckEdit from './DeckEdit.vue';
-
-
+import { fetchUserDecks } from '@/utils/deck.service';
 import { useToast } from 'primevue/usetoast';
 import { useRoute } from 'vue-router';
-import { ref, watch,inject } from 'vue';
+import { ref, watch, inject, reactive, onMounted } from 'vue';
+import { getUserData } from '@/utils/user.service.ts';
 
+const userId = getUserData().id;
 
 const toast = useToast();
 const route = useRoute();
+
 const id = ref(null);
+
 const active_modal_create = ref(false);
+const active_modal_remove = ref(false);
+
 const deckModal = ref(null);
+
+const loading = ref(true);
+const decks = ref([]);
 
 
 watch(() => {
   id.value = route.params.id;
 })
 
-const handleDeckCreation =(resp)=>{
+let isModeEdit = true;
+let deckId;
+
+const handleDeckCreation = (resp) => {
   toast.add({ severity: 'info', summary: 'Deck creado', detail: 'Data Added' });
+  loadData();
 }
-const handleDeckEdition =(resp)=>{
+const handleDeckEdition = (resp) => {
   toast.add({ severity: 'info', summary: 'Deck editado', detail: 'Data Added' });
+  loadData();
 }
-const handleModalClose =(resp)=>{
-  active_modal_create.value=false;
+const handleDeckDeletion = (resp) => {
+  toast.add({ severity: 'warn', summary: 'Deck eliminado' });
+  loadData();
+  handleModalClose();
+}
+const handleModalClose = (resp) => {
+  active_modal_create.value = false;
+  active_modal_remove.value = false;
 }
 
 const items_panel = ref([
-    {
-        label: 'crear deck',
-        icon: 'pi pi-pencil',
-        toast:'crear deck',
-        command: () => {
-             active_modal_create.value=true;
-        }
-    },
-    {
-        label: 'actualizar deck',
-        icon: 'pi pi-refresh',
-        toast:'actualizar deck',
-        command: () => {
-            toast.add({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
-        }
-    },
-    {
-        label: 'eliminar deck',
-        icon: 'pi pi-trash',
-        toast:'eliminar deck',
-        command: () => {
-            toast.add({ severity: 'error', summary: 'Delete', detail: 'Data Deleted' });
-        }
-    }
 ])
 const items = ref([
 
@@ -107,7 +108,33 @@ const items = ref([
 ]);
 
 
-const createDeck=()=>{
-             active_modal_create.value=true;
+const createDeck = () => {
+  isModeEdit = false;
+  active_modal_create.value = true;
 }
+const activeDeckEdit = (event) => {
+  isModeEdit = true;
+  deckId = event;
+  active_modal_create.value = true;
+}
+
+const activeRemoveDeck = (event) => {
+  deckId = event;
+  active_modal_remove.value = true;
+}
+
+
+const loadData = () => {
+  loading.value = true;
+  fetchUserDecks(userId).then((data) => {
+    loading.value = false;
+    decks.value = data;
+  });
+}
+
+onMounted(() => {
+  loadData();
+})
+
+
 </script>

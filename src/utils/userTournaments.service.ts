@@ -1,5 +1,7 @@
-import { userdata } from '@/utils/user.service';
+import { getUserData } from '@/utils/user.service';
 import type { PastTournament, Tournament } from '@/utils/Tournament';
+
+const userdata = getUserData();
 
 function fetchUserAprovedTournaments(userId = userdata.id): Promise<Tournament[]> {
   return new Promise((resolve) => {

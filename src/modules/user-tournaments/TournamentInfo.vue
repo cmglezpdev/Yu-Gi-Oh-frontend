@@ -14,8 +14,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { userdata} from '@/utils/user.service';
+import { getUserData} from '@/utils/user.service';
 import SelectButton from 'primevue/selectbutton';
+const userdata = getUserData();
 const value = ref(
     { route: `my-tournaments/${userdata.id}/aprobed`, value: 'aprobados' },
 );
@@ -23,7 +24,8 @@ const options = ref([
     { route: `/my-tournaments/${userdata.id}/aprobed`, value: 'aprobados' },
     { route: `/my-tournaments/${userdata.id}/pending`, value: 'pendientes' },
     { route: `/my-tournaments/${userdata.id}/rejected`, value: 'rechazados' },
-    { route: `/my-tournaments/${userdata.id}/past`, value: 'pasados' }
+    { route: `/my-tournaments/${userdata.id}/past`, value: 'pasados' },
+    { route: `/my-tournaments/${userdata.id}/pick`, value: 'buscar nuevos' }
 ]);
 
 

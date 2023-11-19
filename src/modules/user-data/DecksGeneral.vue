@@ -3,7 +3,7 @@
     <div class="grid-container">
       <Skeleton size="20rem" v-for="index in 100" v-if="loading"></Skeleton>
 
-      <Card style="width: 20rem" v-for="(deck, index) in  decks.deckList"
+      <Card style="width: 20rem" v-for="(deck, index) in  decks"
         v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
         <template #content>
           <div class="flex flex-col gap-3 relative">
@@ -18,8 +18,8 @@
               <transition name="fade" mode="out-in">
                 <div v-if="index == activeMenu" class="h-full flex justify-start flex-col">
                   <div class="flex flex-row w-full justify-between">
-                     <Button icon="pi pi-trash"  severity="danger"/>
-                     <Button icon="pi pi-pencil" />
+                     <Button v-tooltip="'eliminar'" icon="pi pi-trash" @click="deleteDeck(deck.id)"  severity="danger"/>
+                     <Button v-tooltip="'editar'"   icon="pi pi-pencil" @click="editDeck(deck.id)" />
                   </div>
                   <div class="flex items-end h-full w-full  ">
                     <div class="flex flex-col w-full inset-0 bg-gray-500 bg-opacity-20 backdrop-blur-md">
@@ -58,10 +58,10 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import Skeleton from 'primevue/skeleton';
-import { fetchUserDecks } from '@/utils/deck.service.ts'
+import { fetchUserDecks } from '@/utils/deck.service'
 import Card from 'primevue/card';
 import Button from 'primevue/button';
-import { reactive, ref, watch } from 'vue';
+import { toRefs, ref, watch } from 'vue';
 import Dialog from 'primevue/dialog';
 import DeckEdit from './DeckEdit.vue';
 import { useToast } from 'primevue/usetoast';
@@ -69,19 +69,12 @@ const route = useRoute();
 const id = ref(null);
 const activeMenu = ref(-1);
 
-const decks = reactive({
-  deckList: []
-})
+const props = defineProps({
+  decks:Array,
+  loading:Boolean
+});
 
-const active_modal_create=ref(true);
-
-
-const loading = ref(true);
-
-fetchUserDecks().then((response) => {
-  decks.deckList = response;
-  loading.value = false;
-})
+const {decks,loading} = toRefs(props);
 
 const mostrarMenu = (index) => {
   activeMenu.value = index
@@ -94,11 +87,13 @@ const quitarMenu = () => {
 
 const emit = defineEmits();
 
+emit('askReload')
+
 const editDeck=(deckId)=>{
     emit('editDeck',deckId);
 }
 const deleteDeck=(deckId)=>{
-    emit('deleteDeck',deckId);
+    emit('removeDeck',deckId);
 }
 
 
@@ -106,15 +101,6 @@ watch(() => {
   id.value = route.value;
 })
 
-const handleDeckCreation = (resp) => {
-  toast.add({ severity: 'info', summary: 'Deck creado', detail: 'Data Added' });
-}
-const handleDeckEdition = (resp) => {
-  toast.add({ severity: 'info', summary: 'Deck editado', detail: 'Data Added' });
-}
-const handleModalClose = (resp) => {
-  active_modal_create.value = false;
-}
 </script>
 
 <style scoped>
