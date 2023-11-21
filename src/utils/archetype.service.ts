@@ -1,43 +1,34 @@
 
 // services.js
-const arquetipos:any[]= 
-    [
-    {
-      name:'mostruos',
-      id:'1212122'
-    },
-    {
-      name:'magos',
-      id:'1212122'
-    },
-    {
-      name:'elfos',
-      id:'1212122'
-    },
-    {
-      name:'piad',
-      id:'1212122'
-    },
-    {
-      name:'alimanas',
-      id:'1212122'
-    },
-    {
-      name:'bichejos',
-      id:'1212122'
-    },
-  ]
+interface archetype {
+  name: string,
+  id: string
+}
+
+const getArchetypes = async() => {
+
+  const archetypes : archetype[] = [];
+
+  const response = await fetch(`http://localhost:5202/api/Archetype`).then( r => r.json() )
+
+  response.forEach(element => {
+    let archetype: archetype = {
+      name: element.name,
+      id: element.id,
+    }
+    archetypes.push(archetype)
+  });
+
+  return archetypes;
+}
 
 const fetchArchetypes = ()=>{
   return new Promise((resolve)=>{
-    setTimeout(()=>{
-        resolve(
-        arquetipos
-      )
-    },3000)
+    resolve(
+      getArchetypes()
+    )
   })
 }
-
 
 
 export { fetchArchetypes};
