@@ -163,8 +163,6 @@ const createDeck = async(deck: any) => {
 
 const updateDeck = async(deckId: string, deck: any) => {
 
-  console.log(deck)
-
   deckId = "3c489a77-73c4-419f-bcc8-33324182853d"
   const bodyUpdateDeck = {
     "name": deck.title,
