@@ -1,91 +1,131 @@
 // services.js
-const decks= 
-    [
-    {
-      id:'klkl',
-      title:'deck1',
-      arquetype:'arquetipo1',
-      image:'src/assets/deck.jpeg',      
+
+interface deck {
+  id: string,
+  title: string,
+  arquetype: string,
+  image: string,
+  sideDeck:{
+    cardCount: number
+  },
+  extraDeck:{
+    cardCount: number
+  }
+  cardCount: number
+}
+
+
+const decks : deck[] = [];
+
+// const decks= 
+//     [
+//     {
+//       id:'klkl',
+//       title:'deck1',
+//       arquetype:'arquetipo1',
+//       image:'src/assets/deck.jpeg',      
+//       sideDeck:{
+//         cardCount:12
+//       },
+//       extraDeck:{
+//         cardCount:12
+//       },
+//       cardCount:32,
+//     },
+//     {
+//       id:'klkl',
+//       title:'deck1',
+//       arquetype:'arquetipo1',
+//       sideDeck:{
+//         cardCount:12
+//       },
+//       extraDeck:{
+//         cardCount:12
+//       },
+//       cardCount:32,
+//     },
+//     {
+//       id:'klkl',
+//       title:'deck1',
+//       arquetype:'arquetipo1',
+//       sideDeck:{
+//         cardCount:12
+//       },
+//       extraDeck:{
+//         cardCount:12
+//       },
+//       cardCount:32,
+//     },
+//     {
+//       id:'klkl',
+//       title:'deck1',
+//       arquetype:'arquetipo1',
+//       sideDeck:{
+//         cardCount:12
+//       },
+//       extraDeck:{
+//         cardCount:12
+//       },
+//       cardCount:32,
+//     },
+//     {
+//       id:'klkl',
+//       title:'deck1',
+//       arquetype:'arquetipo1',
+//       sideDeck:{
+//         cardCount:12
+//       },
+//       extraDeck:{
+//         cardCount:12
+//       },
+//       cardCount:32,
+//     },
+//     {
+//       id:'klkl',
+//       title:'deck1',
+//       arquetype:'arquetipo1',
+//       sideDeck:{
+//         cardCount:12
+//       },
+//       extraDeck:{
+//         cardCount:12
+//       },
+//       cardCount:32,
+//     },
+//   ]
+
+const getUserDecks = async() => {
+
+  const response = await fetch('http://localhost:5202/api/Decks').then( r => r.json() )
+
+  response.result.forEach(element => {
+    let deck: deck = {
+      id: element.id,
+      title: element.name,
+      arquetype: element.archetypeId,
+      image: 'src/assets/deck.jpeg',
       sideDeck:{
-        cardCount:12
+        cardCount: element.sideDeck
       },
       extraDeck:{
-        cardCount:12
+        cardCount: element.extraDeck
       },
-      cardCount:32,
-    },
-    {
-      id:'klkl',
-      title:'deck1',
-      arquetype:'arquetipo1',
-      sideDeck:{
-        cardCount:12
-      },
-      extraDeck:{
-        cardCount:12
-      },
-      cardCount:32,
-    },
-    {
-      id:'klkl',
-      title:'deck1',
-      arquetype:'arquetipo1',
-      sideDeck:{
-        cardCount:12
-      },
-      extraDeck:{
-        cardCount:12
-      },
-      cardCount:32,
-    },
-    {
-      id:'klkl',
-      title:'deck1',
-      arquetype:'arquetipo1',
-      sideDeck:{
-        cardCount:12
-      },
-      extraDeck:{
-        cardCount:12
-      },
-      cardCount:32,
-    },
-    {
-      id:'klkl',
-      title:'deck1',
-      arquetype:'arquetipo1',
-      sideDeck:{
-        cardCount:12
-      },
-      extraDeck:{
-        cardCount:12
-      },
-      cardCount:32,
-    },
-    {
-      id:'klkl',
-      title:'deck1',
-      arquetype:'arquetipo1',
-      sideDeck:{
-        cardCount:12
-      },
-      extraDeck:{
-        cardCount:12
-      },
-      cardCount:32,
-    },
-  ]
+      cardCount: element.mainDeck
+    }
+    decks.push(deck)
+  });
+
+  return decks;
+}
+
 
 const fetchUserDecks = (userId:string)=>{
   return new Promise((resolve)=>{
-    setTimeout(()=>{
         resolve(
-        decks
+        getUserDecks()
       )
-    },3000)
   })
 }
-
 
 function addUserDeck(deck:any){
   return new Promise((resolve)=>{
