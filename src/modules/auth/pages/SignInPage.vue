@@ -48,10 +48,10 @@ import InputText from 'primevue/inputtext';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import Button from 'primevue/button';
-import {FormBuilder,Validators,FormGroup} from '@/reactive_form_module/ReactiveFormModule';
+import {FormBuilder,Validators} from '@/reactive_form_module/ReactiveFormModule';
 import {login} from '@/utils/auth.service'
 import { useRouter } from 'vue-router';
-import { ref, reactive,toRefs } from 'vue';
+import { ref } from 'vue';
 
 const _formBuilder = new FormBuilder();
 
@@ -70,11 +70,16 @@ const valid = loginForm.valid;
 
 const onSubmit=async ()=>{
   const {email,password} = loginForm.value;
-    await login(email,password) ;
-  router.push({
-    path:'/',
-    replace:true
-  })
+  const response = await login(email,password);
+  
+  if(response.success) {
+    router.push({
+      path:'/',
+      replace:true
+    })
+  } else {
+    alert(response.message)
+  }
 }
 
 

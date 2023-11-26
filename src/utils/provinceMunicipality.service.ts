@@ -1,51 +1,23 @@
-  export async function getAllProvinces()
-  {
-     return new Promise((resolve,reject)=>{
-      setTimeout(()=>{
-        resolve([
-          {
-            id:'1',
-            name:'Pinar del Rio'
-          },
-          {
-            id:'hjhjkk',
-            name:'Artemisa'
-          },
-          {
-            id:'hjhjkk',
-            name:'La Habana'
-          },
-          {
-            id:'hjhjkk',
-            name:'Matanzas'
-          },
-          {
-            id:'hjhjkk',
-            name:'Oriente'
-          },
+import { type Province } from "@/types.d";
+import { httpClient } from "./axios";
 
-        ])
-      },2000);
-    })
+
+export async function getAllProvinces() {
+  try {
+    const provinces = await httpClient.get<Province[]>('/province');
+    return provinces.data.map(p => ({ id: p.id, name: p.name }));
+  } catch (error) {
+    console.error(error);
+    return [];
   }
-  export async function getMunicipalities(provinceId:string)
-  {
-     return new Promise((resolve,reject)=>{
-      setTimeout(()=>{
-        resolve([
-          {
-            id:'hjhjkk',
-            name:'Municipio1'
-          },
-          {
-            id:'1',
-            name:'Municipio2'
-          },
-          {
-            id:'hjhjkk',
-            name:'Municipio3'
-          },
-        ])
-      },2000);
-    })
+}
+
+export async function getMunicipalities(provinceId: string) {
+  try {
+    const province = await httpClient.get<Province>(`/province/${provinceId}`);
+    return province.data.municipalities.map(m => ({ id: m.id, name: m.name }));
+  } catch (error) {
+    console.error(error);
+    return [];
   }
+}
