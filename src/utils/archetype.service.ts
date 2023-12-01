@@ -1,3 +1,4 @@
+import { httpClient } from "./axios"
 
 // services.js
 interface archetype {
@@ -9,9 +10,10 @@ const getArchetypes = async() => {
 
   const archetypes : archetype[] = [];
 
-  const response = await fetch(`http://localhost:5202/api/Archetype`).then( r => r.json() )
+  const response = await httpClient.get('/Archetype'); 
 
-  response.forEach(element => {
+  console.log(response.data)
+  response.data.forEach((element: any) => {
     let archetype: archetype = {
       name: element.name,
       id: element.id,
