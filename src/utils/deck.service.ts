@@ -1,5 +1,8 @@
 // services.js
 import { httpClient } from "./axios"
+import { getUserData } from "./user.service";
+
+const userdata = getUserData();
 
 interface deck {
   id: string,
@@ -18,7 +21,7 @@ interface deck {
 const getUserDecks = async(userId: string) => {
   const decks : deck[] = [];
 
-  const response = await httpClient.get(`/Decks/${userId}`)
+  const response = await httpClient.get(`/User/decks/${userId}`)
   response.data.result.forEach((element: any) => {
     let deck: deck = {
       id: element.id,
@@ -40,7 +43,7 @@ const getUserDecks = async(userId: string) => {
 }
 
 const getDeckById = async(deckId: string) => {
-  const response = await httpClient.get(`Decks/deckById/${deckId}`)
+  const response = await httpClient.get(`Decks/${deckId}`)
 
   let deck: deck = {
     id: response.data.result.id,
@@ -66,8 +69,7 @@ const createDeck = async(deck: any) => {
   const mainDeck = deck.cardCount;
   const sideDeck = deck.sideDeck.cardCount;
   const extraDeck = deck.extraDeck.cardCount;
-    //TODO: dame el userId y pasalo abajo
-  const userId = "42de3392-3e02-49e9-a87f-9aa85a1fa1ff";
+  const userId = userdata.id;
   
   const request = await httpClient.post('/Decks', { 
     name, archetypeId, mainDeck, sideDeck, extraDeck, userId
@@ -81,8 +83,7 @@ const updateDeck = async(deck: any) => {
   const mainDeck = deck.cardCount;
   const sideDeck = deck.sideDeck.cardCount;
   const extraDeck = deck.extraDeck.cardCount;
-    //TODO: dame el userId y pasalo abajo
-  const userId = "42de3392-3e02-49e9-a87f-9aa85a1fa1ff";
+  const userId = userdata.id;
   
   const request = await httpClient.put(`/Decks/${deck.deckId.value}`, { 
     name, archetypeId, mainDeck, sideDeck, extraDeck, userId
