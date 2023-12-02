@@ -62,7 +62,8 @@ const router = useRouter()
 onMounted(async () => {
   const _tournaments = await fetchAdminCreatedTournaments();
   loading.value = false;
-  tournaments.value = _tournaments});
+  tournaments.value = _tournaments  
+});
 
 const manageTournament =(tournamentId:string)=>{
   router.push({path:`tournaments/${tournamentId}`,replace:true});
