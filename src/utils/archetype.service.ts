@@ -12,7 +12,6 @@ const getArchetypes = async() => {
 
   const response = await httpClient.get('/Archetype'); 
 
-  console.log(response.data)
   response.data.forEach((element: any) => {
     let archetype: archetype = {
       name: element.name,

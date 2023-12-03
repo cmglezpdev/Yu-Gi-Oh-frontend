@@ -44,11 +44,10 @@ const getUserDecks = async(userId: string) => {
 
 const getDeckById = async(deckId: string) => {
   const response = await httpClient.get(`Decks/${deckId}`)
-
   let deck: deck = {
     id: response.data.result.id,
     title: response.data.result.name,
-    arquetype: response.data.result.archetypeId,
+    arquetype: response.data.result.archetype.name,
     image: 'src/assets/deck.jpeg',
     sideDeck:{
       cardCount: response.data.result.sideDeck
@@ -128,6 +127,7 @@ export async function getDeckInfo(deckId:string){
   })
 }
 export async function removeUserDeck(deckId:string){
+  console.log(deckId)
   return new Promise((resolve)=>{
         resolve(
         deleteDeck(deckId)

@@ -191,8 +191,8 @@ if(isModeEdit.value)
           deck_create_form.title.value=resp.title
           deck_create_form.archetype.value=resp.arquetype;
           deck_create_form.cardCount.value=resp.cardCount;
-          deck_create_form.sideDeck.cardCount.value=resp.cardCount;
-          deck_create_form.extraDeck.cardCount.value=resp.cardCount;
+          deck_create_form.sideDeck.cardCount.value=resp.sideDeck.cardCount;
+          deck_create_form.extraDeck.cardCount.value=resp.extraDeck.cardCount;
         enableForm(deck_create_form);
         checkValidity(deck_create_form)
       }
