@@ -29,9 +29,8 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { ref, onMounted } from 'vue';
-import { fetchUserAprovedTournaments } from '@/utils/userTournaments.service'
 import { formatDate } from '@/utils/date.service';
-
+import { fetchUser} from '@/utils/admin.users.service'
 const tournaments = ref([]);
 
 const loading = ref(true);
@@ -39,7 +38,7 @@ const loading = ref(true);
 
 
 onMounted(async () => {
-  const _tournaments = await fetchUserAprovedTournaments();
+  const _tournaments = await fetchUser();
   loading.value = false;
   tournaments.value = _tournaments.map(elem=>{
     elem.date = formatDate(elem.date,'dd/mm/yyyy');

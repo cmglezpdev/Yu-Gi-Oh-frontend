@@ -1,4 +1,3 @@
-import type { Tournament } from "./Tournament";
 import { httpClient } from "./axios";
 import { getUserData } from "./user.service";
 

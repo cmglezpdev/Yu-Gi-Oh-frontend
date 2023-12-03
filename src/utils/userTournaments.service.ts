@@ -42,8 +42,13 @@ const getPastTournaments = async() => {
 }
 
 const getWinner = async(tournamentId: string) => {
-  const winner = await httpClient.get(`/Inscription/${ tournamentId }/winner`);
-  return (winner.data.result.id === userdata.id)? true : false;
+  try{
+    const winner = await httpClient.get(`/Tournament/${ tournamentId }/winner`);
+    return (winner.data.result.id === userdata.id)
+  }
+  catch{
+    return false
+  }
 }
 
 function fetchUserAprovedTournaments(): Promise<Tournament[]> {

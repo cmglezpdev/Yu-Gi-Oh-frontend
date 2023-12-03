@@ -11,7 +11,7 @@ export async function filterTournaments(filter:Filter)
       setTimeout(
         ()=>{
           const latestTournaments=[];
-          for(let i=0 ; i<100;i++)
+          for(let i=0 ; i<50;i++)
           {
             latestTournaments.push({
               id:i.toString(),
