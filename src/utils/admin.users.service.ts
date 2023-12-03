@@ -1,5 +1,4 @@
 import { httpClient } from "./axios";
-import { getUserData } from "./user.service";
 
 const getAllUser = async() => {
     const users: any = [];
