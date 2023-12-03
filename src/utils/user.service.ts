@@ -57,7 +57,7 @@ export const getUserDecks = async (userId: string) => {
     (resolve, reject) => {
       setTimeout(() => {
         const userDecks = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 10; i++) {
           userDecks.push(
           {
             id: 'klkl',
