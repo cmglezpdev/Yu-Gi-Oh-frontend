@@ -25,6 +25,15 @@ const getTournaments = async() => {
   return tournaments;
 }
 
+const postSubscription =async (userId: string, tournamentId: string, deckId: string) => {
+    try {
+      const request = await httpClient.post(`/Inscription`, { userId, deckId, tournamentId });
+      return { status: true, message:'' }
+    }
+    catch {
+      return { status: false, message: 'Error en la inscripción' }
+    }
+}
 export async function filterTournaments(filter:Filter)
 {
   return new Promise(
@@ -37,14 +46,9 @@ export async function filterTournaments(filter:Filter)
 
 export async function makeTournamentSubscription(userId:string,tournamentId:string,deckId:string){
   return new Promise(
-    (resolve,reject)=>{
-      setTimeout(
-        ()=>{
-          const resp ={status:true,message:''};
-          const resp2 ={status:false,message:'por comepinga'};
-          resolve((Math.random()<0.7)?resp:resp2);
-        },
-        3000
+    (resolve)=>{
+      resolve(
+        postSubscription(userId, tournamentId, deckId)
       )
     }
   )

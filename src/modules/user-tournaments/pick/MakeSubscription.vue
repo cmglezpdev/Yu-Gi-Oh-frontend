@@ -27,7 +27,8 @@ import ProgressSpinner from 'primevue/progressspinner';
 import AutoComplete from 'primevue/autocomplete';
 import InputGroup from 'primevue/inputgroup';
 import Button from 'primevue/button';
-import { getUserData, getUserDecks } from '@/utils/user.service';
+import { getUserData } from '@/utils/user.service';
+import { fetchUserDecks } from '@/utils/deck.service'
 import { makeTournamentSubscription } from '@/utils/tournaments.service'
 
 
@@ -44,7 +45,7 @@ const subscriptionForm = _formBuilder.group({
 subscriptionForm.disable();
 
 
-getUserDecks(userId)
+fetchUserDecks(userId)
   .then(
     (decks) => {
       loading.value = false;
@@ -76,10 +77,9 @@ const selectItem = (param) => {
 }
 
 const onSubmit = async () => {
-  console.log(subscriptionForm.value.deck.id);
   subscriptionForm.disable();
   loading.value = true;
-  makeTournamentSubscription(userId, tournamentId, subscriptionForm.value.deck.id)
+  makeTournamentSubscription(userId, tournamentId.value, subscriptionForm.value.deck.id)
     .then(
       (resp => {
         subscriptionForm.enable();

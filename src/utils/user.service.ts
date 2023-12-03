@@ -49,31 +49,3 @@ export const editUserInfo = async (userID: string) => {
       }, 2000);
     })
 }
-
-
-export const getUserDecks = async (userId: string) => {
-
-  return new Promise(
-    (resolve, reject) => {
-      setTimeout(() => {
-        const userDecks = [];
-        for (let i = 0; i < 10; i++) {
-          userDecks.push(
-          {
-            id: 'klkl',
-              title: 'deck'+i,
-                arquetype: 'arquetipo1',
-                  sideDeck: {
-              cardCount: 12*i
-            },
-            extraDeck: {
-              cardCount: 12+i
-            },
-            cardCount: (32+i)%i,
-    },
-)
-    }
-           resolve(userDecks)
-      },2000);
-  }) 
-}
