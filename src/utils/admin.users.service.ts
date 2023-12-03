@@ -1,27 +1,28 @@
 import { httpClient } from "./axios";
 
-const getAllUser = async() => {
-    const users: any = [];
-  
-    const response = await httpClient.get(`User`);
-    response.data.result.forEach(async(element: any) => {
-      let user = {
-        name: element.name,
-        date: new Date(element.startDate),
-        place: element.municipality.name,
-        deckName: "hh",
-      }
-      users.push(user)
-    });
-    return users;
+const getAllUser = async () => {
+  const users: any = [];
+
+  const response = await httpClient.get(`user`);
+  console.log(response.data.result.roles)
+
+  response.data.result.forEach(async (element: any) => {
+    const user = {
+      name: element.name,
+      place: element.municipality.name,
+      roles: element.roles.map(role => role.name).join(', '),
+    }
+    users.push(user)
+  });
+  return users;
 }
 
 export async function fetchUser(): Promise<any[]> {
-    return new Promise(
-      (resolve)=>{
-        resolve(
-          getAllUser()
-        )
-      }
-    )
-  }
+  return new Promise(
+    (resolve) => {
+      resolve(
+        getAllUser()
+      )
+    }
+  )
+}

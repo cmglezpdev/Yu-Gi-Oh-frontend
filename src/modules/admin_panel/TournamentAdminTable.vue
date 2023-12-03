@@ -10,7 +10,7 @@
       <template #paginatorend>
         <Button type="button" icon="pi pi-download" text />
       </template>
-      <Column header="acciones" :exportable="false" style="min-width:8rem">
+      <Column header="Acciones" :exportable="false" style="min-width:5rem">
         <template #body="slotProps">
           <div v-if="!loading && checkDateAfterToday(slotProps.data.date)" class="flex flex-row w-full  gap-2">
             <Button v-tooltip.bottom="'manejar torneo'" icon="pi pi-pencil" @click="manageTournament(slotProps.data.id)" />
@@ -18,20 +18,22 @@
         </template>
       </Column>
       <Column field="name" header="Nombre" style="width: 25%"></Column>
-      <Column field="date" header="fecha" style="width: 25%">
+      <Column field="date" header="Fecha" style="width: 15%">
         <template #body="slotProps">
           <div class="flex flex-row w-full  gap-2">
             {{formatDate(new Date(slotProps.data.date), 'dd/mm/yyyy')}}
           </div>
         </template>
       </Column>
-      <Column field="playerCount" header="cantidad de jugadores inscritos" style="width: 25%" />
-      <Column field="place" header="lugar" style="width: 25%">
-      </Column>
+      <Column field="place" header="Lugar" style="width: 25%" />
+      <Column field="numberOfPlayers" header="Jugadores" style="width: 10%; text-align: center;" />
+      <Column field="numberOfInscriptions" header="Inscripciones" style="width: 10%; text-align: center;" />
 
-      <div v-if="loading" v-for="index in 50" :key="index" class="p-skeleton p-component">
-        <div class="p-skeleton-row p-skeleton-row-indent"></div>
-      </div>
+      <template v-if="loading">
+        <div v-for="index in 50" :key="index" class="p-skeleton p-component">
+          <div class="p-skeleton-row p-skeleton-row-indent"></div>
+        </div>
+      </template>
 
     </DataTable>
 

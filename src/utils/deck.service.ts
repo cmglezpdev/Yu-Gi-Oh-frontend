@@ -4,34 +4,34 @@ import { getUserData } from "./user.service";
 
 const userdata = getUserData();
 
-interface deck {
+interface Deck {
   id: string,
   title: string,
   arquetype: string,
   image: string,
-  sideDeck:{
+  sideDeck: {
     cardCount: number
   },
-  extraDeck:{
+  extraDeck: {
     cardCount: number
   }
   cardCount: number
 }
 
-const getUserDecks = async(userId: string) => {
-  const decks : deck[] = [];
+const getUserDecks = async (userId: string) => {
+  const decks: Deck[] = [];
 
   const response = await httpClient.get(`/User/decks/${userId}`)
   response.data.result.forEach((element: any) => {
-    let deck: deck = {
+    const deck: Deck = {
       id: element.id,
       title: element.name,
       arquetype: element.archetypeId,
       image: 'src/assets/deck.jpeg',
-      sideDeck:{
+      sideDeck: {
         cardCount: element.sideDeck
       },
-      extraDeck:{
+      extraDeck: {
         cardCount: element.extraDeck
       },
       cardCount: element.mainDeck
@@ -42,97 +42,95 @@ const getUserDecks = async(userId: string) => {
   return decks;
 }
 
-const getDeckById = async(deckId: string) => {
+const getDeckById = async (deckId: string) => {
   const response = await httpClient.get(`Decks/${deckId}`)
-  let deck: deck = {
+
+  const deck: Deck = {
     id: response.data.result.id,
     title: response.data.result.name,
-    arquetype: response.data.result.archetype.name,
+    arquetype: response.data.result.archetype?.name,
     image: 'src/assets/deck.jpeg',
-    sideDeck:{
+    sideDeck: {
       cardCount: response.data.result.sideDeck
     },
-    extraDeck:{
+    extraDeck: {
       cardCount: response.data.result.extraDeck
     },
     cardCount: response.data.result.mainDeck
   }
-  
+
   return deck
 }
 
-const createDeck = async(deck: any) => {
+const createDeck = async (deck: any) => {
   const name = deck.title;
-  //TODO: dame el archetypeId y pasalo abajo
-  const archetypeId = "09f8419d-75fc-461b-bf1c-7bd4848da935";
+  const archetypeId = deck.archetype;
   const mainDeck = deck.cardCount;
   const sideDeck = deck.sideDeck.cardCount;
   const extraDeck = deck.extraDeck.cardCount;
   const userId = userdata.id;
-  
-  const request = await httpClient.post('/Decks', { 
+
+  const request = await httpClient.post('/Decks', {
     name, archetypeId, mainDeck, sideDeck, extraDeck, userId
-   }); 
+  });
 }
 
-const updateDeck = async(deck: any) => {
+const updateDeck = async (deck: any) => {
   const name = deck.title;
-  //TODO: dame el archetypeId y pasalo abajo
-  const archetypeId = "09f8419d-75fc-461b-bf1c-7bd4848da935";
+  const archetypeId = deck.archetype;
   const mainDeck = deck.cardCount;
   const sideDeck = deck.sideDeck.cardCount;
   const extraDeck = deck.extraDeck.cardCount;
   const userId = userdata.id;
-  
-  const request = await httpClient.put(`/Decks/${deck.deckId.value}`, { 
+
+  const request = await httpClient.put(`/Decks/${deck.deckId.value}`, {
     name, archetypeId, mainDeck, sideDeck, extraDeck, userId
-   }); 
+  });
 }
 
-const deleteDeck = async(deckId: string) => {
+const deleteDeck = async (deckId: string) => {
   //TODO: Dame el deckId
   const request = await httpClient.delete(`/Decks/${deckId}`)
 }
 
-const fetchUserDecks = (userId:string)=>{
-  return new Promise((resolve)=>{
-        resolve(
-        getUserDecks(userId)
-      )
+const fetchUserDecks = (userId: string) => {
+  return new Promise((resolve) => {
+    resolve(
+      getUserDecks(userId)
+    )
   })
 }
 
-function addUserDeck(deck:any){
-  return new Promise((resolve)=>{
-      resolve(
+function addUserDeck(deck: any) {
+  return new Promise((resolve) => {
+    resolve(
       createDeck(deck)
     )
   })
 }
 
-export async function editUserDeck(deck:any){
-  return new Promise((resolve)=>{
-      resolve(
-        updateDeck(deck)
-      )
+export async function editUserDeck(deck: any) {
+  return new Promise((resolve) => {
+    resolve(
+      updateDeck(deck)
+    )
   })
 }
 
 
-export async function getDeckInfo(deckId:string){
-  return new Promise((resolve)=>{
-      resolve(
+export async function getDeckInfo(deckId: string) {
+  return new Promise((resolve) => {
+    resolve(
       getDeckById(deckId)
     )
   })
 }
-export async function removeUserDeck(deckId:string){
-  console.log(deckId)
-  return new Promise((resolve)=>{
-        resolve(
-        deleteDeck(deckId)
-      )
+export async function removeUserDeck(deckId: string) {
+  return new Promise((resolve) => {
+    resolve(
+      deleteDeck(deckId)
+    )
   })
 }
 
-export { fetchUserDecks,addUserDeck};
+export { fetchUserDecks, addUserDeck };

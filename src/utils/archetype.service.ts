@@ -6,14 +6,14 @@ interface archetype {
   id: string
 }
 
-const getArchetypes = async() => {
+const getArchetypes = async () => {
 
-  const archetypes : archetype[] = [];
+  const archetypes: archetype[] = [];
 
-  const response = await httpClient.get('/Archetype'); 
+  const response = await httpClient.get('/Archetype');
 
   response.data.forEach((element: any) => {
-    let archetype: archetype = {
+    const archetype: archetype = {
       name: element.name,
       id: element.id,
     }
@@ -23,8 +23,8 @@ const getArchetypes = async() => {
   return archetypes;
 }
 
-const fetchArchetypes = ()=>{
-  return new Promise((resolve)=>{
+const fetchArchetypes = () => {
+  return new Promise((resolve) => {
     resolve(
       getArchetypes()
     )
@@ -32,4 +32,4 @@ const fetchArchetypes = ()=>{
 }
 
 
-export { fetchArchetypes};
+export { fetchArchetypes };

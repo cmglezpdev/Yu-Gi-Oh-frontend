@@ -11,10 +11,9 @@
         <Button type="button" icon="pi pi-download" text />
       </template>
       <Column field="name" header="Nombre" style="width: 25%"></Column>
-      <Column field="date" header="fecha" style="width: 25%"></Column>
-      <Column field="deckName" header="nombre del deck" style="width: 25%" />
-      <Column field="place" header="lugar" style="width: 25%">
-      </Column>
+      <Column field="place" header="Lugar" style="width: 25%"></Column>
+      <Column field="roles" header="Roles" style="width: 25%"></Column>
+      <Column field="edit" header="Editar Usuario" style="width: 25%"></Column>
 
       <div v-if="loading" v-for="index in 5" :key="index" class="p-skeleton p-component">
         <div class="p-skeleton-row p-skeleton-row-indent"></div>
@@ -40,10 +39,7 @@ const loading = ref(true);
 onMounted(async () => {
   const _tournaments = await fetchUser();
   loading.value = false;
-  tournaments.value = _tournaments.map(elem=>{
-    elem.date = formatDate(elem.date,'dd/mm/yyyy');
-    return elem
-  });
+  tournaments.value = _tournaments;
 });
 
 

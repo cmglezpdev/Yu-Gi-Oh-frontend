@@ -37,7 +37,7 @@
   <Toast />
 </template>
 
-<script setup >
+<script setup lang="ts">
 import TabMenu from 'primevue/tabmenu';
 import DeckDelete from './DeckDelete.vue'
 import SpeedDial from 'primevue/speeddial';
@@ -47,7 +47,7 @@ import DeckEdit from './DeckEdit.vue';
 import { fetchUserDecks } from '@/utils/deck.service';
 import { useToast } from 'primevue/usetoast';
 import { useRoute } from 'vue-router';
-import { ref, watch, inject, reactive, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { getUserData } from '@/utils/user.service.ts';
 
 const userId = getUserData().id;
