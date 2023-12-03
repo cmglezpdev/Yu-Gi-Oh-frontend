@@ -8,6 +8,8 @@ export const getUserData = () => {
 
 const getUser = async(userId: string) => {
   const response = (await httpClient.get(`User/${userId}`)).data.result;
+  const winned_matches = (await httpClient.get(`User/wins/${userId}`)).data.result;
+  const losed_matches = (await httpClient.get(`User/loses/${userId}`)).data.result;
   return {
     name: response.name,
     email: response.email,
@@ -19,8 +21,8 @@ const getUser = async(userId: string) => {
       id: response.municipality.id,
       name: response.municipality.name,
     },
-    winned_matches: 12,
-    losed_matches: 24,
+    winned_matches,
+    losed_matches,
   }
 }
 export const getUserFullInfo = async (userID: string) => {
