@@ -10,11 +10,10 @@
       <template #paginatorend>
         <Button type="button" icon="pi pi-download" text />
       </template>
-      <Column field="name" header="Nombre" style="width: 25%"></Column>
-      <Column field="role" header="rol" style="width: 25%"></Column>
-      <Column field="email" header="email" style="width: 25%" />
-      <!-- <Column field="place" header="lugar" style="width: 25%"> -->
-      <!-- </Column> -->
+      <Column field="name" header="Nombre" style="width: 25%" />
+      <Column field="email" header="Correo" style="width: 25%" />
+      <Column field="roles" header="Roles" style="width: 25%" />
+      <Column field="place" header="Lugar" style="width: 25%" />
 
       <div v-if="loading" v-for="index in 5" :key="index" class="p-skeleton p-component">
         <div class="p-skeleton-row p-skeleton-row-indent"></div>
@@ -31,14 +30,14 @@ import Column from 'primevue/column';
 import { ref, onMounted } from 'vue';
 import { formatDate } from '@/utils/date.service';
 
-import {getusersFromPanel} from '@/utils/admin.users.service.ts'
+import {getUsersFromPanel} from '@/utils/admin.users.service.ts'
 
 const users = ref([]);
 
 const loading = ref(true);
 
 const load=async () => {
-  const _users = await getusersFromPanel();
+  const _users = await getUsersFromPanel();
   loading.value = false;
   users.value = _users
 }
