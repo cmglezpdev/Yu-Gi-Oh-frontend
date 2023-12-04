@@ -5,26 +5,28 @@
           animationDuration=".5s" aria-label="Custom ProgressSpinner" />
     </div>
     <h1 class="text-center m-4">
-    Seguro quiere eliminar el deck?
+      Seguro quiere eliminar el deck?
     </h1>
     <div class="flex flex-row gap-3 justify-center">
-    <Button @click="deleteDeck" >Si</Button>
+    <Button @click="deleteDeck">Si</Button>
     <Button @click="close" class="bg-red-400">No</Button>
     </div>
 
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
-import {ref} from 'vue';
+import {ref, toRefs} from 'vue';
 const emit = defineEmits();
 import {removeUserDeck} from '@/utils/deck.service'
 
 const props = defineProps({
-  deckId:String
+  deckId: String
 })
+
+const {deckId} = toRefs(props);
 
 const close=()=>{
   emit('close');
@@ -32,9 +34,10 @@ const close=()=>{
 
 const loading = ref(false);
 
-const deleteDeck=async ()=>{
+const deleteDeck=async () => {
   loading.value=true;
- await removeUserDeck()
+  console.log({ props })
+  await removeUserDeck(deckId!.value!)
   loading.value=false;
   emit('deckRemoved');
 }

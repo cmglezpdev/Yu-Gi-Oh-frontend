@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="flex flex-row w-full justify-center text-lg">
-      <h1>{{ isModeEdit ? 'Editar Carta' : 'Crear Carta' }}</h1>
+      <h1>{{ isModeEdit ? 'Editar Deck' : 'Crear Deck' }}</h1>
     </div>
     <form class="w-full flex flex-col gap-4 p-6"> <span class="p-float-label ">
         <InputText v-model="deck_create_form.title.value" :disabled="!deck_create_form.title.enabled"
@@ -70,7 +70,7 @@
     </form>
   </div>
 </template>
-<script setup >
+<script setup lang="ts">
 import AutoComplete from 'primevue/autocomplete';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
@@ -195,9 +195,9 @@ watch(() => {
 if (isModeEdit.value) {
   isLoading.value = true;
   disableForm(deck_create_form);
-  getDeckInfo(deckId.value)
+  getDeckInfo(deckId!.value!)
     .then(
-      (resp) => {
+      (resp:any) => {
         isLoading.value = false;
         deck_create_form.title.value = resp.title
         deck_create_form.archetype.value = resp.arquetype;
@@ -211,6 +211,8 @@ if (isModeEdit.value) {
 }
 
 const onSubmit = async () => {
+  const archetypes = await fetchArchetypes() as any[];
+  const archetype = archetypes.find(atype => atype.name == deck_create_form.archetype.value)
 
   // console.log( deck_create_form.archetype.value)
 
@@ -221,7 +223,7 @@ const onSubmit = async () => {
     const deck = {
       deckId,
       title: deck_create_form.title.value,
-      arquetype: deck_create_form.archetype.value,
+      arquetype: archetype.id,
       cardCount: deck_create_form.cardCount.value,
       sideDeck: {
         cardCount: deck_create_form.sideDeck.cardCount.value
@@ -239,7 +241,7 @@ const onSubmit = async () => {
 
     const deck = {
       title: deck_create_form.title.value,
-      arquetype: deck_create_form.archetype.value,
+      // arquetype: deck_create_form.archetype.value,
       cardCount: deck_create_form.cardCount.value,
       sideDeck: {
         cardCount: deck_create_form.sideDeck.cardCount.value

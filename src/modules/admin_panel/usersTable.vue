@@ -29,7 +29,6 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { ref, onMounted } from 'vue';
-import { fetchUserAprovedTournaments } from '@/utils/userTournaments.service'
 import { formatDate } from '@/utils/date.service';
 
 import {getusersFromPanel} from '@/utils/admin.users.service.ts'
@@ -46,6 +45,5 @@ const load=async () => {
 
 
 onMounted(load);
-
 
 </script>

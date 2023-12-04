@@ -1,23 +1,35 @@
-export async function fetchAdminCreatedTournaments(userId:string)
-{
+import { httpClient } from "./axios";
+import { getUserData } from "./user.service";
+
+const userdata = getUserData();
+
+const getParticipants = async(tournamentId: string) => {
+  const response = await httpClient.get(`tournament/participants/${tournamentId}`);
+  return (response.data.result == 5)? 5 : 0;
+}
+const getTournaments = async() => {
+  const tournaments: any = [];
+
+  const response = await httpClient.get(`user/tournaments/${ userdata.id }`);
+  for (const element of response.data.result) {
+    const tournament = {
+      name: element.name,
+      date: new Date(element.startDate),
+      place: element.municipality.name,
+      numberOfPlayers: element.numberOfPlayers,
+      numberOfInscriptions: element.numberOfInscriptions,
+    }
+    console.log(tournament)
+    tournaments.push(tournament)
+  }
+  return tournaments;
+}
+
+export async function fetchAdminCreatedTournaments(): Promise<any[]> {
   return new Promise(
-    (resolve,reject)=>{
-      setTimeout(
-        ()=>{
-          const latestTournaments=[];
-          for(let i=0 ; i<100;i++)
-          {
-            latestTournaments.push({
-              id:i.toString(),
-              name:`tournament ${i}`,
-              date:new Date(),
-              place:`lugar ${i}`,
-              playerCount:`${(i+1)*100}`
-            })
-          }
-          resolve(latestTournaments)
-        },
-        3000
+    (resolve)=>{
+      resolve(
+        getTournaments()
       )
     }
   )

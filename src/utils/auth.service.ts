@@ -1,37 +1,54 @@
-import { useRouter } from "vue-router";
+import { httpClient } from './axios';
 import { LocalStorageKey, LocalStorageService } from "./localStorage.service";
 
 
 export async function login(email: string, password: string) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      LocalStorageService.saveData(LocalStorageKey.TOKEN, 'jkjkhjkhkhkhjk')
-      LocalStorageService.saveData(LocalStorageKey.USER, {
-        id: '1234',
-        name: 'Usuario',
-        email
-      })
-      resolve({ token: 'bkkgkhgkkgjkgkgjjkhjkhg' })
-    }, 1000);
-  })
+  try {
+    const authResponse = await httpClient.post('/auth/signin', { email, password });
+    const userData = authResponse.data.result;
+    LocalStorageService.saveData(LocalStorageKey.TOKEN, userData.token);
+    LocalStorageService.saveData(LocalStorageKey.USER, userData);
+
+    return { success: true }
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: (error as any).response.data.errorMessage
+    }
+  }
 }
 
 
-export async function register(name: string, email: string, password: string, passwordConfirm: string,province:string,municipality:string) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      LocalStorageService.saveData(LocalStorageKey.TOKEN, 'jkjkhjkhkhkhjk')
-      LocalStorageService.saveData(LocalStorageKey.USER, {
-        id: '1234',
-        name ,
-        email
-      })
-      resolve({ token: 'bkkgkhgkkgjkgkgjjkhjkhg' })
-    }, 1000);
-  })
+export async function register(
+  name: string, email: string,
+  password: string, municipality: string
+) {
+
+  try {
+    const authResponse = await httpClient.post('/auth/signup', {
+      email, password, name,
+      municipalityId: municipality,
+      username: email.split('@')[0]
+    })
+
+    const userData = authResponse.data.result;
+    LocalStorageService.saveData(LocalStorageKey.TOKEN, userData.token);
+    LocalStorageService.saveData(LocalStorageKey.USER, userData);
+
+    return {
+      success: true
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: (error as any).response.data.errorMessage
+    }
+  }
 }
 
 
-export const logout=()=>{  
+export const logout = () => {
   localStorage.clear();
 }

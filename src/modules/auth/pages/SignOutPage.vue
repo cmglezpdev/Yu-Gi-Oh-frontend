@@ -99,7 +99,7 @@ import {register} from '@/utils/auth.service';
 import { useRouter} from 'vue-router';
 import {getAllProvinces,getMunicipalities} from '@/utils/provinceMunicipality.service'
 import { reactive, ref } from "vue";
-import { FormBuilder, Validators, FormGroup, AbstractControl } from '@/reactive_form_module/ReactiveFormModule';
+import { FormBuilder, Validators } from '@/reactive_form_module/ReactiveFormModule';
 
 
 let allProvinces=reactive([]);
@@ -107,7 +107,7 @@ let municipalities = reactive([]);
 
 getAllProvinces()
   .then((provinceList)=>{
-   allProvinces=provinceList;
+    allProvinces = provinceList
   })
 
 const router = useRouter()
@@ -150,12 +150,18 @@ signUpForm.get('province').valueChange(
 )
 
 const onSubmit =async ()=>{
-    const {name,email,password,passwordConfirm,province,municipality} = signUpForm.value;
-    await register(name,email,password,passwordConfirm,province.id,municipality.id) ;
-  router.push({
-    path:'/',
-    replace:true
-  })
+    const {name, email, password, municipality} = signUpForm.value;
+    const response = await register(name, email, password, municipality.id);
+
+    if(response.success) {
+      router.push({
+        path:'/',
+        replace:true
+      })
+    } else {
+      alert(response.message)
+    }
+
 }
 
 </script>
