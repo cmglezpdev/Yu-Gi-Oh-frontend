@@ -1,4 +1,8 @@
 <template>
+  <div v-if="loading" class="w-screen h-screen fixed z-50 blurred-background top-0 flex justify-center items-center">
+    <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"
+      animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+  </div>
   <div class="card flex flex-col gap-3">
 
     <h1>Inicia Sesion</h1>
@@ -40,10 +44,13 @@
       <router-link to="signup"> crea una cuenta </router-link>
     </div>
   </div>
+  <Toast />
 </template>
 
 <script setup>
 
+import ProgressSpinner from 'primevue/progressspinner';
+import Toast from 'primevue/toast';
 import InputText from 'primevue/inputtext';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
@@ -52,10 +59,15 @@ import {FormBuilder,Validators} from '@/reactive_form_module/ReactiveFormModule'
 import {login} from '@/utils/auth.service'
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 
 const _formBuilder = new FormBuilder();
 
 const router = useRouter()
+
+const loading = ref(false)
+
+const toast = useToast()
   
 
 const loginForm =  _formBuilder.group(
@@ -78,7 +90,7 @@ const onSubmit=async ()=>{
       replace:true
     })
   } else {
-    alert(response.message)
+  toast.add({ severity: 'error', summary: response.message, detail: '' });
   }
 }
 

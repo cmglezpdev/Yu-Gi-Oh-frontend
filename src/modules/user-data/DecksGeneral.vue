@@ -77,6 +77,8 @@ const props = defineProps({
 
 const {decks,loading} = toRefs(props);
 
+console.log(decks)
+
 const mostrarMenu = (index) => {
   activeMenu.value = index
 }

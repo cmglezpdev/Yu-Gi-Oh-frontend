@@ -58,8 +58,8 @@ import Button from 'primevue/button'
 import Menu from 'primevue/menu';
 import Avatar from 'primevue/avatar';
 import Toolbar from 'primevue/toolbar';
-import { ref } from 'vue';
-import { items, userdata, setRedirection } from './layout_syntax';
+import { ref,onUpdated } from 'vue';
+import { reload,items, userdata, setRedirection } from './layout_syntax';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 
@@ -74,6 +74,10 @@ setRedirection(
 
   }
 )
+
+onUpdated(() => {
+  reload()
+})
 
 const visible = ref(true);
 

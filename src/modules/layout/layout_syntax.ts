@@ -1,7 +1,12 @@
-import { ref } from "vue";
+import { ref, toRefs } from "vue";
 import { getUserData} from '@/utils/user.service';
 import {logout} from '@/utils/auth.service';
-const userdata=getUserData()
+
+const userdata=toRefs(getUserData())
+
+export const reload =()=>{
+   userdata.value=getUserData();
+}
 
 let redirect:any;
 

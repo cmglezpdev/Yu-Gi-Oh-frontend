@@ -1,5 +1,5 @@
-import type { Tournament } from "./Tournament";
 import { httpClient } from "./axios";
+import { getUserData } from "./user.service";
 
 export class Filter{
 
@@ -76,18 +76,22 @@ export async function fetchTournamentMatches(tournamentId:string,matchStep:numbe
   )
 }
 
-export async function createTournament(name:string,playerCount:number)
+export async function createTournament(
+ name: string,
+   description :  string ,
+   municipalityId :  string ,
+   startDate :  Date ,
+   endDate :  Date 
+)
 {
-  return new Promise(
-    (resolve,reject)=>{
-      setTimeout(
-        ()=>{
-          resolve({});
-        },
-        3000
-      )
-    }
-  )
+ return httpClient.post(`Tournament`,{
+ name,
+   description,
+   userId:getUserData().id,
+   municipalityId,
+   startDate,
+   endDate
+  })
 }
 
 export async function fetchTournamentInfo(id:string)

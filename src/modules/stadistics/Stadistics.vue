@@ -127,7 +127,6 @@ signUpForm.get('province').valueChange(
     signUpForm.disable();
     municipalities = await getMunicipalities(value.id);
     if (edit.value) {
-
       signUpForm.enable();
     }
   }
@@ -140,6 +139,7 @@ signUpForm.disable();
 getUserFullInfo(userId)
   .then(
     (resp) => {
+      console.log(resp)
       signUpForm.patchValue(resp);
       signUpForm.get('province').setValue(allProvinces.find((item) => {
         return item.id == resp.province.id

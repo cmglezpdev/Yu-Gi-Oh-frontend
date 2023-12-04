@@ -8,10 +8,8 @@ export async function login(email: string, password: string) {
     const userData = authResponse.data.result;
     LocalStorageService.saveData(LocalStorageKey.TOKEN, userData.token);
     LocalStorageService.saveData(LocalStorageKey.USER, userData);
-
     return { success: true }
   } catch (error) {
-    console.error(error);
     return {
       success: false,
       message: (error as any).response.data.errorMessage
@@ -29,8 +27,7 @@ export async function register(
     const authResponse = await httpClient.post('/auth/signup', {
       email, password, name,
       municipalityId: municipality,
-      username: email.split('@')[0]
-    })
+      username: name    })
 
     const userData = authResponse.data.result;
     LocalStorageService.saveData(LocalStorageKey.TOKEN, userData.token);

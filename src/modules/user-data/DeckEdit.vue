@@ -232,6 +232,8 @@ const onSubmit = async () => {
         cardCount: deck_create_form.extraDeck.cardCount.value
       }
     }
+    console.log(deck)
+    alert()
     await editUserDeck(deck);
     emit('deckEdited');
   } else {
@@ -241,7 +243,7 @@ const onSubmit = async () => {
 
     const deck = {
       title: deck_create_form.title.value,
-      // arquetype: deck_create_form.archetype.value,
+      arquetype: deck_create_form.archetype.value,
       cardCount: deck_create_form.cardCount.value,
       sideDeck: {
         cardCount: deck_create_form.sideDeck.cardCount.value
@@ -250,6 +252,7 @@ const onSubmit = async () => {
         cardCount: deck_create_form.extraDeck.cardCount.value
       }
     }
+
 
     await addUserDeck(deck);
     emit('deckCreated');
