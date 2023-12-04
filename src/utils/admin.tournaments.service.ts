@@ -13,13 +13,13 @@ const getTournaments = async() => {
   const response = await httpClient.get(`user/tournaments/${ userdata.id }`);
   for (const element of response.data.result) {
     const tournament = {
+      id:element.id,
       name: element.name,
       date: new Date(element.startDate),
       place: element.municipality.name,
       numberOfPlayers: element.numberOfPlayers,
       numberOfInscriptions: element.numberOfInscriptions,
     }
-    console.log(tournament)
     tournaments.push(tournament)
   }
   return tournaments;

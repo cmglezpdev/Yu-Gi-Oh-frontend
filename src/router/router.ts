@@ -95,6 +95,19 @@ const routes = [
                 component: () => import('@/modules/admin_panel/ManageTournament.vue'),
               }
             ]
+          },
+          {
+            path: 'inscriptions',
+            children: [
+              {
+                path: '',
+                component: () => import('@/modules/admin_panel/TournamentAdminTable.vue'),
+              },
+              {
+                path: ':id',
+                component: () => import('@/modules/admin_panel/ManageTournament.vue'),
+              }
+            ]
           }
         ]
       }

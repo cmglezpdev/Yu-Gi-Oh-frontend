@@ -8,17 +8,13 @@
       tableStyle="min-width: 50rem"
       paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
       currentPageReportTemplate="{first} to {last} of {totalRecords}">
-      <template #paginatorstart>
-        <Button type="button" icon="pi pi-refresh" text />
-      </template>
-      <template #paginatorend>
-        <Button type="button" icon="pi pi-download" text />
-      </template>
       <Column header="Acciones" :exportable="false" style="min-width:5rem">
         <template #body="slotProps">
           <div v-if="!loading && checkDateAfterToday(slotProps.data.date)" class="flex flex-row w-full  gap-2">
             <Button v-tooltip.bottom="'manejar torneo'" icon="pi pi-pencil"
               @click="manageTournament(slotProps.data.id)" />
+            <Button v-tooltip.bottom="'manejar inscripciones'" icon="pi pi-pencil"
+              @click="manageInscriptions(slotProps.data.id)" />
           </div>
         </template>
       </Column>
@@ -78,7 +74,7 @@ const tournaments = ref([] as any[]);
 const loading = ref(true);
 
 const checkDateAfterToday = (date: Date) => {
-  return (new Date()) >= date;
+  return (new Date()) <= date;
 }
 
 const router = useRouter()
@@ -117,6 +113,9 @@ const handle_error = () => {
 
 const manageTournament = (tournamentId: string) => {
   router.push({ path: `tournaments/${tournamentId}`, replace: true });
+}
+const manageInscriptions = (tournamentId: string) => {
+  router.push({ path: `inscriptions/${tournamentId}`, replace: true });
 }
 
 </script>

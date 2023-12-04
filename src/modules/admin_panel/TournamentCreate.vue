@@ -123,7 +123,6 @@ const tournament_create_form = _formbuilder.group({
 
 tournament_create_form.get('province').valueChange(
   async (value)=>{    
-    console.log(tournament_create_form.value)
     municipalities.value=[];
     tournament_create_form.get('municipality').setValue(null)
     tournament_create_form.disable();
@@ -136,7 +135,7 @@ tournament_create_form.get('province').valueChange(
 const valid = tournament_create_form.valid;
 
 const onSubmit = async ()=>{
-  const {name,description,playerCount,municipality,province,startDate,endDate}=tournament_create_form.value;
+  const {name,description,municipality,startDate,endDate}=tournament_create_form.value;
   loading.value=true;
   valid.value=false;
    await createTournament(name,description,municipality.id,startDate,endDate)
