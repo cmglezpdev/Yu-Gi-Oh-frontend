@@ -6,7 +6,7 @@
     </div>
     <InputGroup class="flex flex-col">
       <span class="p-float-label ">
-        <AutoComplete field="title" v-model="subscriptionForm.get('deck').realValue"
+        <AutoComplete forceSelection field="title" v-model="subscriptionForm.get('deck').realValue"
           :disabled="!subscriptionForm.get('deck').enabled" class="w-full"
           :class="{ 'p-invalid': !subscriptionForm.get('deck').valid }" :suggestions="filteredItems" @complete="search"
           inputStyle="width: 100%;" @click="subscriptionForm.get('deck').touch()" @onSelect="selectItem" />

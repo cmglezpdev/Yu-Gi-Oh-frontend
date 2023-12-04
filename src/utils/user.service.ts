@@ -1,5 +1,5 @@
-import { reactive } from 'vue';
 import { LocalStorageKey, LocalStorageService } from './localStorage.service';
+
 
 export const getUserData = () => {
   return JSON.parse(LocalStorageService.loadData(LocalStorageKey.USER)!);

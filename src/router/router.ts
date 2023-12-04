@@ -80,6 +80,10 @@ const routes = [
             component: () => import('@/modules/admin_panel/usersTable.vue'),
           },
           {
+            path: 'stadistics',
+            component: () => import('@/modules/admin_panel/Stadistics.vue'),
+          },
+          {
             path: 'tournaments',
             children: [
               {

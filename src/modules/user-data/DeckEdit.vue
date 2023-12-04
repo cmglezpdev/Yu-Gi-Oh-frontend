@@ -20,9 +20,16 @@
       </span>
 
       <span class="p-float-label ">
-        <AutoComplete v-model="deck_create_form.archetype.value" :disabled="!deck_create_form.archetype.enabled"
-          class="w-full" :class="{ 'p-invalid': !deck_create_form.archetype.valid }" :suggestions="items"
-          @complete="search" inputStyle="width: 100%;" @click="deck_create_form.archetype.touched = true" />
+        <AutoComplete forceSelection v-model="deck_create_form.archetype.value" optionLabel="name"
+          :disabled="!deck_create_form.archetype.enabled" class="w-full"
+          :class="{ 'p-invalid': !deck_create_form.archetype.valid }" :suggestions="items" @complete="search"
+          inputStyle="width: 100%;" @click="deck_create_form.archetype.touched = true">
+          <template #option="slotProps">
+            <div @click="selectArchetype(slotProps.option.id)">
+              {{ slotProps.option.name }}
+            </div>
+          </template>
+        </AutoComplete>
         <label for="number-input">Arquetipo</label>
         <transition name="fade" mode="out-in">
           <div v-if="!deck_create_form.archetype.valid" class="text-red-700">campo requerido</div>
@@ -63,26 +70,28 @@
     </form>
   </div>
 </template>
-<script setup>
+<script setup >
 import AutoComplete from 'primevue/autocomplete';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
-import { ref, watch,defineProps, reactive, toRefs, onMounted } from 'vue';
-import {  editUserDeck,addUserDeck , getDeckInfo } from '@/utils/deck.service';
+import { ref, watch, defineProps, reactive, toRefs, onMounted } from 'vue';
+import { editUserDeck, addUserDeck, getDeckInfo } from '@/utils/deck.service';
 import { fetchArchetypes } from '@/utils/archetype.service';
 
 const emit = defineEmits();
 
 const isLoading = ref(false);
 
+let selectedId  ;
+
 const props = defineProps({
-   isModeEdit:Boolean,
-   deckId:String
+  isModeEdit: Boolean,
+  deckId: String
 });
 
-const {isModeEdit,deckId} = toRefs(props);
+const { isModeEdit, deckId } = toRefs(props);
 
 const validatorRequired = (elem) => elem != null;
 
@@ -90,6 +99,9 @@ const validatorMin = (minv) => {
   return (elem) => elem >= minv;
 }
 
+const selectArchetype = (id) => {
+  selectedId = id;
+}
 
 const deck_create_form = reactive({
   title: {
@@ -180,19 +192,18 @@ watch(() => {
   deck_create_form.invalid = !deck_create_form.valid;
 })
 
-if(isModeEdit.value)
-{
-    isLoading.value = true;
+if (isModeEdit.value) {
+  isLoading.value = true;
   disableForm(deck_create_form);
   getDeckInfo(deckId.value)
-  .then(
-      (resp)=>{
-    isLoading.value = false;
-          deck_create_form.title.value=resp.title
-          deck_create_form.archetype.value=resp.arquetype;
-          deck_create_form.cardCount.value=resp.cardCount;
-          deck_create_form.sideDeck.cardCount.value=resp.cardCount;
-          deck_create_form.extraDeck.cardCount.value=resp.cardCount;
+    .then(
+      (resp) => {
+        isLoading.value = false;
+        deck_create_form.title.value = resp.title
+        deck_create_form.archetype.value = resp.arquetype;
+        deck_create_form.cardCount.value = resp.cardCount;
+        deck_create_form.sideDeck.cardCount.value = resp.cardCount;
+        deck_create_form.extraDeck.cardCount.value = resp.cardCount;
         enableForm(deck_create_form);
         checkValidity(deck_create_form)
       }
@@ -200,6 +211,8 @@ if(isModeEdit.value)
 }
 
 const onSubmit = async () => {
+
+  // console.log( deck_create_form.archetype.value)
 
   if (isModeEdit.value) {
     isLoading.value = true;
@@ -252,8 +265,9 @@ const search = async (event) => {
   isLoading.value = true;
   const all = await fetchArchetypes();
   isLoading.value = false;
-  items.value = all.filter(elem => elem.name.toLowerCase().includes(query.toLowerCase())).map(elem => elem.name);
+  items.value = all.filter(elem => elem.name.toLowerCase().includes(query.toLowerCase()));
 }
+
 // disableForm(deck_create_form)
 checkValidity(deck_create_form);
 
@@ -268,4 +282,5 @@ checkValidity(deck_create_form);
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-}</style>
+}
+</style>

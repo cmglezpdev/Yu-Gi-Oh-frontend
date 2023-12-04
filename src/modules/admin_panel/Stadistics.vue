@@ -1,0 +1,3 @@
+<template>
+  stadistics works
+</template>

@@ -66,7 +66,7 @@
 
       </div>
 
-      <Button class="accept-button w-full" v-if="edit" @click="onSubmit" :disabled="!valid"  label="Aceptar" />
+      <Button class="accept-button w-full" v-if="edit" @click="onSubmit" :disabled="!valid" label="Aceptar" />
     </div>
 
   </div>
@@ -80,7 +80,7 @@ import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
-import { getUserData, getUserFullInfo,editUserInfo } from '@/utils/user.service';
+import { getUserData, getUserFullInfo, editUserInfo } from '@/utils/user.service';
 import { getAllProvinces, getMunicipalities } from '@/utils/provinceMunicipality.service'
 import { reactive, ref, computed } from "vue";
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@/reactive_form_module/ReactiveFormModule';
@@ -126,9 +126,9 @@ signUpForm.get('province').valueChange(
     signUpForm.get('municipality').setValue(null)
     signUpForm.disable();
     municipalities = await getMunicipalities(value.id);
-    if(edit.value)
-  {
-    signUpForm.enable();
+    if (edit.value) {
+
+      signUpForm.enable();
     }
   }
 )
@@ -144,12 +144,12 @@ getUserFullInfo(userId)
       signUpForm.get('province').setValue(allProvinces.find((item) => {
         return item.id == resp.province.id
       }))
-        getMunicipalities(resp.province.id).then(_municipalities => {
-          municipalities = _municipalities;
-          signUpForm.get('municipality').setValue(municipalities.find((item) => {
-            return item.id == resp.municipality.id
-          }))
-        })
+      getMunicipalities(resp.province.id).then(_municipalities => {
+        municipalities = _municipalities;
+        signUpForm.get('municipality').setValue(municipalities.find((item) => {
+          return item.id == resp.municipality.id
+        }))
+      })
       winned_matches.value = resp.winned_matches;
       total.value = resp.winned_matches + resp.losed_matches;
     }
@@ -160,11 +160,11 @@ const setEditable = () => {
   signUpForm.enable();
 }
 
-const onSubmit = async ()=>{
+const onSubmit = async () => {
   signUpForm.disable();
-  const {name,email,province,municipality} = signUpForm.value;
-  await editUserInfo(userId,name,email,province,municipality);
-  edit.value=false;
+  const { name, email, province, municipality } = signUpForm.value;
+  await editUserInfo(userId, name, email, province, municipality);
+  edit.value = false;
 }
 
 </script>

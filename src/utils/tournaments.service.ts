@@ -54,13 +54,44 @@ export async function fetchTournamentMatches(tournamentId:string,matchStep:numbe
       setTimeout(
         ()=>{
           const match=[
-            [{user1:'12',user2:'21',deck1:'12',deck2:'32'},{user1:'12',user2:'21',deck1:'12',deck2:'32'},{user1:'12',user2:'21',deck1:'12',deck2:'32'}],
-            [{user1:'12',user2:'21',deck1:'12',deck2:'32'},{user1:'12',user2:'21',deck1:'12',deck2:'32'},{user1:'12',user2:'21',deck1:'12',deck2:'32'}],
-            [{user1:'12',user2:'21',deck1:'12',deck2:'32'},{user1:'12',user2:'21',deck1:'12',deck2:'32'},{user1:'12',user2:'21',deck1:'12',deck2:'32'}],
-            [{user1:'12',user2:'21',deck1:'12',deck2:'32'}],
-            [{user1:'12',user2:'21',deck1:'12',deck2:'32'}],
+            [{user1:'juan',user2:'pedro',deck1:'deck1',deck2:'deck de dragones'},{user1:'alfredo',user2:'luis',deck1:'deck de prueba',deck2:'deck'},{user1:'alberto',user2:'roger',deck1:'dragones',deck2:'dragoncitos'}],
+            [{user1:'juan',user2:'pedro',deck1:'deck1',deck2:'deck de dragones'},{user1:'alfredo',user2:'luis',deck1:'deck de prueba',deck2:'deck'}],
+            [{user1:'juan',user2:'pedro',deck1:'deck1',deck2:'deck de dragones'},{user1:'alfredo',user2:'luis',deck1:'deck de prueba',deck2:'deck'}],
+            [{user1:'juan',user2:'pedro',deck1:'deck1',deck2:'deck de dragones'},{user1:'alfredo',user2:'luis',deck1:'deck de prueba',deck2:'deck'},{user1:'alberto',user2:'roger',deck1:'dragones',deck2:'dragoncitos'},{user1:'alberto',user2:'roger',deck1:'dragones',deck2:'dragoncitos'}],
           ]
-          resolve(match[matchStep]);
+          resolve(match[matchStep-1]);
+        },
+        3000
+      )
+    }
+  )
+}
+
+export async function createTournament(name:string,playerCount:number)
+{
+  return new Promise(
+    (resolve,reject)=>{
+      setTimeout(
+        ()=>{
+          resolve({});
+        },
+        3000
+      )
+    }
+  )
+}
+
+export async function fetchTournamentInfo(id:string)
+{
+  return new Promise(
+    (resolve,reject)=>{
+      setTimeout(
+        ()=>{
+          resolve({
+            name:'torneo de prueba',
+            players:100,
+            stages:3
+          });
         },
         3000
       )

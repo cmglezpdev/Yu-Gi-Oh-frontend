@@ -24,6 +24,7 @@
                   <div class="flex items-end h-full w-full  ">
                     <div class="flex flex-col w-full inset-0 bg-gray-500 bg-opacity-20 backdrop-blur-md">
                       <div class="w-full border">
+                        <h3 class="text-cyan-500 text-center text-2xl m-4">Arquetipo: {{ deck.arquetype }} </h3>
                         <h3 class="text-cyan-500 text-center text-2xl m-4">Main Deck: {{ deck.cardCount }} </h3>
                       </div>
                       <div class="w-full border flex flex-row ">

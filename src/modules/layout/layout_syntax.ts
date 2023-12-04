@@ -49,6 +49,11 @@ const items = ref([
         icon: 'pi pi-desktop',
         route: '/admin/tournaments'
       },
+      {
+        label: 'Estadisticas generales',
+        icon: 'pi pi-chart-bar',
+        route: '/admin/stadistics'
+      },
     ]
   },
   {

@@ -18,6 +18,7 @@
         </template>
       </Column>
       <Column field="title" header="Name" style="width: 25%"></Column>
+      <Column field="arquetype" header="Arquetipo" style="width: 25%"></Column>
       <Column field="cardCount" header="Cantidad de cartas" style="width: 25%"></Column>
       <Column field="sideDeck.cardCount" header="Cartas en el side deck" style="width: 25%">
       </Column>

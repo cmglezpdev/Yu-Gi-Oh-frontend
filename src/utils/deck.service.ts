@@ -1,4 +1,7 @@
 // services.js
+
+import { getUserData } from "./user.service"
+
 const decks= 
     [
     {
