@@ -129,6 +129,7 @@ const activeRemoveDeck = (event) => {
 const loadData = () => {
   loading.value = true;
   fetchUserDecks(userId).then((data) => {
+    console.log(data)
     loading.value = false;
     decks.value = data;
   });

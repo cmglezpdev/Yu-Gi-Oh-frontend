@@ -47,7 +47,7 @@ const getDeckById = async (deckId: string) => {
   const deck: Deck = {
     id: response.data.result.id,
     title: response.data.result.name,
-    arquetype: response.data.result.archetype?.name,
+    arquetype: response.data.result.archetype,
     image: 'src/assets/deck.jpeg',
     sideDeck: {
       cardCount: response.data.result.sideDeck
@@ -63,7 +63,7 @@ const getDeckById = async (deckId: string) => {
 
 const createDeck = async (deck: any) => {
   const name = deck.title;
-  const archetypeId = deck.archetype;
+  const archetypeId = deck.arquetype;
   const mainDeck = deck.cardCount;
   const sideDeck = deck.sideDeck.cardCount;
   const extraDeck = deck.extraDeck.cardCount;
@@ -76,7 +76,7 @@ const createDeck = async (deck: any) => {
 
 const updateDeck = async (deck: any) => {
   const name = deck.title;
-  const archetypeId = deck.archetype;
+  const archetypeId = deck.arquetype;
   const mainDeck = deck.cardCount;
   const sideDeck = deck.sideDeck.cardCount;
   const extraDeck = deck.extraDeck.cardCount;

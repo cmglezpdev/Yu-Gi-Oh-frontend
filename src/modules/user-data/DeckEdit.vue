@@ -192,12 +192,14 @@ watch(() => {
   deck_create_form.invalid = !deck_create_form.valid;
 })
 
+onMounted(()=>{
 if (isModeEdit.value) {
   isLoading.value = true;
   disableForm(deck_create_form);
   getDeckInfo(deckId!.value!)
     .then(
       (resp:any) => {
+          console.log(resp)
         isLoading.value = false;
         deck_create_form.title.value = resp.title
         deck_create_form.archetype.value = resp.arquetype;
@@ -209,12 +211,12 @@ if (isModeEdit.value) {
       }
     )
 }
+})
 
 const onSubmit = async () => {
   const archetypes = await fetchArchetypes() as any[];
   const archetype = archetypes.find(atype => atype.name == deck_create_form.archetype.value)
 
-  // console.log( deck_create_form.archetype.value)
 
   if (isModeEdit.value) {
     isLoading.value = true;
@@ -223,7 +225,7 @@ const onSubmit = async () => {
     const deck = {
       deckId,
       title: deck_create_form.title.value,
-      arquetype: archetype.id,
+      arquetype: deck_create_form.archetype.value?.id,
       cardCount: deck_create_form.cardCount.value,
       sideDeck: {
         cardCount: deck_create_form.sideDeck.cardCount.value
@@ -232,8 +234,7 @@ const onSubmit = async () => {
         cardCount: deck_create_form.extraDeck.cardCount.value
       }
     }
-    console.log(deck)
-    alert()
+
     await editUserDeck(deck);
     emit('deckEdited');
   } else {
@@ -241,9 +242,10 @@ const onSubmit = async () => {
     isLoading.value = true;
     disableForm(deck_create_form);
 
+
     const deck = {
       title: deck_create_form.title.value,
-      arquetype: deck_create_form.archetype.value,
+      arquetype: deck_create_form.archetype.value.id,
       cardCount: deck_create_form.cardCount.value,
       sideDeck: {
         cardCount: deck_create_form.sideDeck.cardCount.value
@@ -252,7 +254,6 @@ const onSubmit = async () => {
         cardCount: deck_create_form.extraDeck.cardCount.value
       }
     }
-
 
     await addUserDeck(deck);
     emit('deckCreated');
