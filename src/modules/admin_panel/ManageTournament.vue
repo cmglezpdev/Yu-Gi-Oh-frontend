@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div v-if="loading">
 <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"
       animationDuration=".5s" aria-label="Custom ProgressSpinner" />
   </div>
-
+  <Round @reload="updateMatches" :matches="matches" />
 <div class="flex h-screen flex-col justify-between p-8" v-if="items.length > 0">
     <div class="flex flex-row justify-center gap-2 items-center">
     <h1 class="text-lg text-stone-50">{{tName.toUpperCase()}}</h1>
@@ -11,9 +11,9 @@
     </div>
     <Steps  :model="items" :readonly="false" v-model:activeStep="currentStep" />
 
-<div v-if="currentStep != items.length - 1">
-    <Round :matches="matches" />
-  </div>
+
+    
+
 <div v-if="currentStep == items.length - 1">
     <Final :players="matches" />
   </div>
@@ -25,7 +25,16 @@
   </div>
   </div>
   </div>
-
+  <InputGroup v-if="currentStep==0" class="flex flex-col">
+      <span class="p-float-label">
+        <InputText id="name" v-model="round2"/>
+        <label for="name">cantidad para pasar al round 2</label>
+      </span>
+    </InputGroup >
+  <div class="flex flex-row gap-3">
+<Button @click="prevStep" :disabled="currentStep === 0" label="Anterior" icon="pi pi-right" />
+<Button @click="nextStep" :disabled="round2==0"  label="Siguiente" icon="pi pi-left" iconPos="right" />
+  </div>
 </template>
 
 <script setup>
@@ -39,7 +48,8 @@ import { TournamentManagement } from '@/utils/tournament.management.service';
 
 import { ref, watch, onMounted } from "vue";
 import { useRouter, useRoute } from 'vue-router'
-
+import InputText from 'primevue/inputtext';
+import InputGroup from 'primevue/inputgroup';
 
 const route = useRoute()
 
@@ -53,6 +63,7 @@ const tName = ref('');
 const tPlayersCount = ref(0);
 const currentStep = ref(0);
 const competitionStep = ref(1);
+const round2 = ref(0)
 const loading = ref(true);
 const matches = ref([]);
 const title = ref("");
@@ -60,13 +71,19 @@ const title = ref("");
 onMounted(async () => {
   const resp = await tournamentManage.value.generateMixing(tournamentId)
   const round = await tournamentManage.value.getRoundDuels(tournamentId, 0);
-  console.log(round);
    matches.value=round.data.result;
+   loading.value = false;
+   console.log(matches.value);
 })
 
 const updateMatches = async () => {
   loading.value = true;
-  const round = await tournamentManage.value.getRoundDuels(tournamentId, 0);
+  let round;
+  if(currentStep.value==1){
+       round = await tournamentManage.value.roundAfterMixing(tournamentId,round2.value);
+  }else{
+      round = await tournamentManage.value.getRoundDuels(tournamentId, currentStep.value);
+  }
   matches.value = round.data.result;
   loading.value = false;
   console.log(matches.value)
@@ -84,9 +101,9 @@ watch(currentStep, async (oldval, newval) => {
 
 
 const nextStep = () => {
-  if (currentStep.value < items.value.length) {
     currentStep.value++;
-  }
+    updateMatches();
+  
 };
 
 const prevStep = () => {
@@ -97,7 +114,7 @@ const prevStep = () => {
 
 //methods
 //main
-updateMatches();
+//updateMatches();
 //main
 </script>
 <style scoped>

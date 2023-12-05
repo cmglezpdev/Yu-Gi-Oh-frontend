@@ -3,20 +3,25 @@ export class TournamentManagement{
 
   async getRoundDuels(tournamentId:string,round:number)
   {
-   const info = await httpClient.get(`Duels/${tournamentId}/${round}`)
+    const info = await httpClient.get(`Duels/?TournamentID=${tournamentId}`)
     return info;
   }
 
   async generateMixing(tournamentId:string)
   {
-    const info = await httpClient.post(`Duels/set-initial-duels`,{
+    try 
+    {const info = await httpClient.post(`Duels/set-initial-duels`,{
         tournamentId
     })
-    return info;
+    return info;}
+    catch{
+      return {}
+    }
   }
 
-  async realizaDuel(duelId:string,winner:'a' | 'b')
+  async realizaDuel(duelId:string,winner:'A' | 'B')
   {
+    console.log(duelId, winner)
     const info = await httpClient.post(`Duels/realize-duel`,{
       duelId,
       winner
