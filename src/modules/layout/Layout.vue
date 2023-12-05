@@ -28,9 +28,9 @@
 
         <div class="flex justify-center">
 
-          <Menu :model="items" class="border-0 w-full">
+          <Menu :model="items" class="border-0 w-full">            
             <template #item="{ item, props }" >
-              <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+              <div v-if="item.visible" >              <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                 <a v-ripple :href="href" v-bind="props.action" @click="navigate">
                   <span :class="item.icon" />
                   <span class="ml-2">{{ item.label }}</span>
@@ -40,6 +40,8 @@
                 <span :class="item.icon" />
                 <span class="ml-2">{{ item.label }}</span>
               </a>
+              </div>
+
             </template>
           </Menu>
         </div>
@@ -58,7 +60,7 @@ import Button from 'primevue/button'
 import Menu from 'primevue/menu';
 import Avatar from 'primevue/avatar';
 import Toolbar from 'primevue/toolbar';
-import { ref,onUpdated } from 'vue';
+import { ref,onMounted,onUpdated } from 'vue';
 import { reload,items, userdata, setRedirection } from './layout_syntax';
 import { useRouter } from 'vue-router';
 const router = useRouter()
@@ -76,6 +78,10 @@ setRedirection(
 )
 
 onUpdated(() => {
+  reload()
+})
+
+onMounted(() => {
   reload()
 })
 

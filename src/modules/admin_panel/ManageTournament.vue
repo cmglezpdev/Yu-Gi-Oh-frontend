@@ -35,8 +35,9 @@ import Round from './Round.vue'
 import ProgressSpinner from 'primevue/progressspinner';
 import Button from 'primevue/button';
 import { fetchTournamentMatches,fetchTournamentInfo } from '@/utils/tournaments.service'
+import {TournamentManagement} from '@/utils/tournament.management.service';
 
-import { ref, watch } from "vue";
+import { ref, watch,onMounted } from "vue";
 import  {useRouter,useRoute} from 'vue-router'
 
 
@@ -44,6 +45,12 @@ const route = useRoute()
   
 const tournamentId=route.params.id
 
+const tournamentManage = ref(new TournamentManagement());
+
+onMounted(async () => {
+       const resp = tournamentManage.value.generateMixing(tournamentId)
+  console.log(resp,'kkjj');
+})
 //reactivity handeling
 const items = ref([]);
 const tName = ref('');
