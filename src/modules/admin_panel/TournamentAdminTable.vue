@@ -83,6 +83,7 @@ const active_modal_create = ref(false);
 
 const loadData = async () => {
   const _tournaments: any[] = await fetchAdminCreatedTournaments(getUserData().id) as Array<any>;
+  console.log(_tournaments)
   loading.value = false;
   tournaments.value = _tournaments;
 }

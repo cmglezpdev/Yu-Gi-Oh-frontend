@@ -1,24 +1,24 @@
 <template>
-  <div v-if="loading" class="w-screen h-screen fixed z-50 blurred-background top-0 flex justify-center items-center">
-    <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"
+  <div>
+<ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"
       animationDuration=".5s" aria-label="Custom ProgressSpinner" />
   </div>
 
-  <div class="flex h-screen flex-col justify-between p-8" v-if="items.length > 0">
+<div class="flex h-screen flex-col justify-between p-8" v-if="items.length > 0">
     <div class="flex flex-row justify-center gap-2 items-center">
     <h1 class="text-lg text-stone-50">{{tName.toUpperCase()}}</h1>
       <h3>({{tPlayersCount}} jugadores)</h3>
     </div>
     <Steps  :model="items" :readonly="false" v-model:activeStep="currentStep" />
 
-  <div v-if="currentStep != items.length - 1">
+<div v-if="currentStep != items.length - 1">
     <Round :matches="matches" />
   </div>
-  <div v-if="currentStep == items.length - 1">
+<div v-if="currentStep == items.length - 1">
     <Final :players="matches" />
   </div>
 
-  <div class="flex flex-row justify-center">
+<div class="flex flex-row justify-center">
   <div class="flex flex-row gap-3">
 <Button @click="prevStep" :disabled="currentStep === 1" label="Anterior" icon="pi pi-right" />
 <Button @click="nextStep" :disabled="currentStep === items.length" label="Siguiente" icon="pi pi-left" iconPos="right" />
@@ -34,23 +34,19 @@ import Final from './Final.vue'
 import Round from './Round.vue'
 import ProgressSpinner from 'primevue/progressspinner';
 import Button from 'primevue/button';
-import { fetchTournamentMatches,fetchTournamentInfo } from '@/utils/tournaments.service'
-import {TournamentManagement} from '@/utils/tournament.management.service';
+import { fetchTournamentMatches, fetchTournamentInfo } from '@/utils/tournaments.service'
+import { TournamentManagement } from '@/utils/tournament.management.service';
 
-import { ref, watch,onMounted } from "vue";
-import  {useRouter,useRoute} from 'vue-router'
+import { ref, watch, onMounted } from "vue";
+import { useRouter, useRoute } from 'vue-router'
 
 
 const route = useRoute()
-  
-const tournamentId=route.params.id
+
+const tournamentId = route.params.id
 
 const tournamentManage = ref(new TournamentManagement());
 
-onMounted(async () => {
-       const resp = tournamentManage.value.generateMixing(tournamentId)
-  console.log(resp,'kkjj');
-})
 //reactivity handeling
 const items = ref([]);
 const tName = ref('');
@@ -59,20 +55,19 @@ const currentStep = ref(0);
 const competitionStep = ref(1);
 const loading = ref(true);
 const matches = ref([]);
-const title= ref("");
+const title = ref("");
 
-fetchTournamentInfo(tournamentId)
-  .then(tinfo=>{
-    tName.value= tinfo.name;
-    tPlayersCount.value = tinfo.players;
-     for (let i=0;i<tinfo.stages ; i++) {
-       items.value.push({label:''})
-     }
-  })
+onMounted(async () => {
+  const resp = await tournamentManage.value.generateMixing(tournamentId)
+  const round = await tournamentManage.value.getRoundDuels(tournamentId, 0);
+  console.log(round);
+   matches.value=round.data.result;
+})
 
 const updateMatches = async () => {
   loading.value = true;
-  matches.value = await fetchTournamentMatches(tournamentId, competitionStep.value)
+  const round = await tournamentManage.value.getRoundDuels(tournamentId, 0);
+  matches.value = round.data.result;
   loading.value = false;
   console.log(matches.value)
 }
@@ -120,4 +115,5 @@ updateMatches();
   background: inherit;
   filter: blur(10px);
   /* Ajusta el valor para controlar la cantidad de desenfoque */
-}</style>
+}
+</style>

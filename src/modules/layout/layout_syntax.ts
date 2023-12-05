@@ -7,6 +7,7 @@ const isAdmin = ref(true)
 
 export const reload = () => {
   userdata.value = getUserData();
+  items.value[1].visible=userdata.value.roles.some(el=>el=='Admin');
 }
 
 let redirect: any;
@@ -64,7 +65,7 @@ const items = ref([
       },
       {
         label: 'Estadisticas generales',
-        visible: true,
+        visible: false,
         icon: 'pi pi-chart-bar',
         route: '/admin/stadistics'
       },

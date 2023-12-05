@@ -6,6 +6,7 @@ export async function login(email: string, password: string) {
   try {
     const authResponse = await httpClient.post('/auth/signin', { email, password });
     const userData = authResponse.data.result;
+    console.log(userData)
     LocalStorageService.saveData(LocalStorageKey.TOKEN, userData.token);
     LocalStorageService.saveData(LocalStorageKey.USER, userData);
     return { success: true }
