@@ -25,7 +25,7 @@ const getUserDecks = async (userId: string) => {
     const deck: Deck = {
       id: element.id,
       title: element.name,
-      arquetype: element.archetypeId,
+      arquetype: element.archetype?.name,
       image: 'src/assets/deck.jpeg',
       sideDeck: {
         cardCount: element.sideDeck

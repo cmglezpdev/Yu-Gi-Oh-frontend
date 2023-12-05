@@ -29,7 +29,7 @@
         <div class="flex justify-center">
 
           <Menu :model="items" class="border-0 w-full">
-            <template #item="{ item, props }">
+            <template #item="{ item, props }" v-if="item.active">
               <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                 <a v-ripple :href="href" v-bind="props.action" @click="navigate">
                   <span :class="item.icon" />
