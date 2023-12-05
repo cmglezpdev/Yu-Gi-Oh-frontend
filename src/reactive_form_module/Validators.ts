@@ -28,6 +28,16 @@ export default  class Validators {
     }
     return { 'minlength': true };
   }
+
+  public static passwordMatch = (cb:()=>boolean)=>(param:AbstractControl)=>{
+    if(cb())
+     {
+     return null;
+    }else{
+    return { 'passwordmatch': true };
+    }
+  }
+
 }
 
 

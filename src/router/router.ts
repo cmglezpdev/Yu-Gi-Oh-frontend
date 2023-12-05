@@ -105,7 +105,7 @@ const routes = [
               },
               {
                 path: ':id',
-                component: () => import('@/modules/admin_panel/ManageTournament.vue'),
+                component: () => import('@/modules/admin_panel/Inscriptions.vue'),
               }
             ]
           }

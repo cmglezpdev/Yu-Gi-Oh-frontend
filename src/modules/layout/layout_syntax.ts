@@ -2,7 +2,7 @@ import { ref, toRefs } from "vue";
 import { getUserData} from '@/utils/user.service';
 import {logout} from '@/utils/auth.service';
 
-const userdata=toRefs(getUserData())
+const userdata=ref(getUserData())
 
 export const reload =()=>{
    userdata.value=getUserData();
@@ -26,17 +26,17 @@ const items = ref([
       {
         label: 'Decks',
         icon: 'pi pi-box',
-        route: `/my-decks/${userdata.id}/general`
+        route: `/my-decks/${userdata.value.id}/general`
       },
       {
         label: 'Torneos',
         icon: 'pi pi-tag',
-        route: `/my-tournaments/${userdata.id}/aprobed`
+        route: `/my-tournaments/${userdata.value.id}/aprobed`
       },
       {
         label: 'Informacion del usuario',
         icon: 'pi pi-chart-bar',
-        route: `/my-stadistics/${userdata.id}`
+        route: `/my-stadistics/${userdata.value.id}`
       },
     ]
   },

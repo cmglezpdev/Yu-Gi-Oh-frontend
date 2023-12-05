@@ -1,6 +1,12 @@
 import { httpClient } from "./axios";
 import { getUserData } from "./user.service";
 
+export enum Status {
+  Pending =0,
+  Aprobbed = 1,
+  Rejected =2,
+}
+
 const userdata = getUserData();
 
 const getParticipants = async(tournamentId: string) => {
@@ -33,4 +39,11 @@ export async function fetchAdminCreatedTournaments(): Promise<any[]> {
       )
     }
   )
+}
+
+
+export async function fetchTournamentInscriptions(tournametId:string,status:Status)
+{
+  const response = await httpClient.get(`Inscription?TournamentId=${tournametId}&Status=${status}`)
+  return response.data.result;
 }
